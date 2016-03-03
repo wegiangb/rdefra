@@ -19,7 +19,7 @@ library(devtools)
 This package is currently under development and available via devtools:
 
 ```R
-install_github("cvitolo/rdefra")
+install_github("cvitolo/r_rdefra", subdir = "rdefra")
 ```
 
 Now, load the rdefra package:
