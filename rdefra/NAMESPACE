@@ -1,0 +1,12 @@
+importFrom(RCurl, getURL)
+importFrom(RCurl, url.exists)
+importFrom(XML, htmlParse)
+importFrom(XML, xpathSApply)
+importFrom(XML, xmlGetAttr)
+importFrom(XML, xmlValue)
+importFrom(plyr, rbind.fill)
+
+export(EastingNorthing)
+export(catalogue)
+export(getSiteID)
+export(get1Hdata)

@@ -1,0 +1,38 @@
+\name{stations}
+\alias{stations}
+\docType{data}
+\title{
+List of all the DEFRA air quality monitoring stations with complete coordinates.
+}
+\description{
+This is the list of all the air quality monitoring stations ever installed in the UK and operated by DEFRA networks (as per February 2016).
+}
+\usage{data("stations")}
+\format{
+  A data frame with 6561 observations on the following 14 variables.
+  \describe{
+    \item{\code{UK.AIR.ID}}{ID reference for monitoring stations}
+    \item{\code{EU.Site.ID}}{EU.Site.ID}
+    \item{\code{EMEP.Site.ID}}{EMEP.Site.ID}
+    \item{\code{Site.Name}}{Site name}
+    \item{\code{Environment.Type}}{a factor with levels \code{Background Rural} \code{Background Suburban} \code{Background Urban} \code{Industrial Suburban} \code{Industrial Unknown} \code{Industrial Urban} \code{Traffic Urban} \code{Unknown Unknown}}
+    \item{\code{Zone}}{Zone}
+    \item{\code{Start.Date}}{Start date}
+    \item{\code{End.Date}}{End date}
+    \item{\code{Latitude}}{Latitude (WGS 84)}
+    \item{\code{Longitude}}{Longitude (WGS 84)}
+    \item{\code{Altitude..m.}}{Altitude in metres above sea level}
+    \item{\code{Networks}}{Monitoring Networks}
+    \item{\code{AURN.Pollutants.Measured}}{Pollutant measured}
+    \item{\code{Site.Description}}{Site.Description}
+    \item{\code{SiteID}}{Site ID}
+  }
+}
+\source{
+\url{http://uk-air.defra.gov.uk/}
+}
+\examples{
+data(stations)
+## maybe str(stations) ; plot(stations) ...
+}
+\keyword{datasets}
