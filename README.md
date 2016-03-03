@@ -10,7 +10,8 @@ There is no public API and this package just scrapes the website for information
 The rnrfa package is dependent on a number of CRAN packages. Install them first:
 
 ```R
-install.packages(c("RCurl", "XML"))
+install.packages(c("RCurl", "XML", "plyr", "devtools"))
+library(devtools)
 ```
 
 
