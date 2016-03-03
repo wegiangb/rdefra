@@ -10,7 +10,7 @@ There is no public API and this package just scrapes the website for information
 The rnrfa package is dependent on a number of CRAN packages. Install them first:
 
 ```R
-install.packages(c("RCurl", "XML", "plyr", "devtools"))
+install.packages(c("RCurl", "XML", "plyr", "devtools", "rgdal", "sp"))
 library(devtools)
 ```
 
@@ -39,24 +39,32 @@ stations <- catalogue()
 Some of these have no coordinates but Easting (E) and Northing (N) are available on the DEFRA website. Get E and N, transform them to latitude and longitude and populate the missing coordinates using the code below.
 
 ```R
+# Find stations with no coordinates
 myRows <- which(is.na(stations$Latitude) | is.na(stations$Longitude))
+# Get the ID of stations with no coordinates
 stationList <- as.character(stations$UK.AIR.ID[myRows])
+# Web scrape DEFRA website to get Easting/Northing
 EN <- EastingNorthing(stationList)
+# Only keep non-NA Easting/Northing coordinates
 noNA <- which(!is.na(EN$Easting) & !is.na(EN$Northing))
 
 require(rgdal); require(sp)
+# Define spatial points
 pt <- EN[noNA,]
 coordinates(pt) <- ~Easting+Northing
 proj4string(pt) <- CRS("+init=epsg:27700")
+# Convert coordinates from British National Grid to WGS84
 pt <- data.frame(spTransform(pt, CRS("+init=epsg:4326"))@coords)  
 
+# Populate the catalogue with newly calculated coordinates
 stations$Longitude[myRows][noNA] <- pt$Easting
 stations$Latitude[myRows][noNA] <- pt$Northing
 
+# Keep only stations with coordinates
 stations <- stations[-which(is.na(stations$Latitude) | is.na(stations$Longitude)),]
 ```
 
-Check whether there are flat files available
+Check whether there are hourly data available
 ```R
 stations$SiteID <- getSiteID(stations$UK.AIR.ID)
 validStations <- which(!is.na(stations$SiteID))
