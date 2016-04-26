@@ -69,7 +69,7 @@ get1Hdata <- function(site_id, years){
 
 get1Hdata_internal <- function(site_id, myYears){
 
-  rootURL <- "http://uk-air.defra.gov.uk/data_files/site_data/"
+  rootURL <- "https://uk-air.defra.gov.uk/data_files/site_data/"
   myURL <- paste(rootURL, site_id, "_", myYears, ".csv", sep = "")
 
   if (url.exists(myURL)){

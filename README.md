@@ -86,8 +86,10 @@ leaflet(data = stationsNew) %>% addTiles() %>%
                    radius = 0.5, color="red", popup = ~SiteID[validStations])
 ```
 
-How many of the above stations are in England?
+How many of the above stations are in England and have hourly records?
 ```R
+stationsNew <- stationsNew[!is.na(stationsNew$SiteID),]
+
 library(raster) 
 adm <- getData('GADM', country='GBR', level=1)
 England <- adm[adm$NAME_1=='England',]
@@ -97,9 +99,10 @@ stationsSP <- SpatialPoints(stationsNew[, c('Longitude', 'Latitude')],
 library(sp)
 x <- over(stationsSP, England)[,1]
 x <- which(!is.na(x))
+stationsNew <- stationsNew[x,]
 
 library(leaflet)
-leaflet(data = stationsNew[x,]) %>% addTiles() %>% 
+leaflet(data = stationsNew) %>% addTiles() %>% 
   addCircleMarkers(lng = ~Longitude, lat = ~Latitude, 
                    radius = 0.5, color="red", popup = ~SiteID)
 ```
@@ -107,7 +110,7 @@ leaflet(data = stationsNew[x,]) %>% addTiles() %>%
 Pollution data started to be collected in 1972, however hourly data is available only from XXXX. Building the time series for a given station can be done in one line of code:
 
 ```R
-df <- get1Hdata("ABD", years=1972:2016)
+df <- get1Hdata("BAR2", years=1972:2016)
 ```
 
 Using parallel processing, the acquisition of data from hundreds of sites takes only few minutes:
