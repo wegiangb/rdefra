@@ -30,7 +30,6 @@ library(rdefra)
 
 # Functions
 DEFRA monitoring stations can be downloaded and fitered using the function `catalogue()`. A cached version (downloaded in Feb 2016) is in `data(stations)`. 
-
 ```R
 # Get full catalogue
 stations <- catalogue()
@@ -43,10 +42,11 @@ Some of these have no coordinates but Easting (E) and Northing (N) are available
 myRows <- which(is.na(stations$Latitude) | is.na(stations$Longitude))
 # Get the ID of stations with no coordinates
 stationList <- as.character(stations$UK.AIR.ID[myRows])
-# Web scrape DEFRA website to get Easting/Northing
+# Scrape DEFRA website to get Easting/Northing
 EN <- EastingNorthing(stationList)
 # Only keep non-NA Easting/Northing coordinates
 noNA <- which(!is.na(EN$Easting) & !is.na(EN$Northing))
+yesNA <- which(is.na(EN$Easting) & is.na(EN$Northing))
 
 require(rgdal); require(sp)
 # Define spatial points
@@ -55,36 +55,59 @@ coordinates(pt) <- ~Easting+Northing
 proj4string(pt) <- CRS("+init=epsg:27700")
 # Convert coordinates from British National Grid to WGS84
 pt <- data.frame(spTransform(pt, CRS("+init=epsg:4326"))@coords)  
+names(pt) <- c("Longitude", "Latitude")
 
 # Populate the catalogue with newly calculated coordinates
-stations$Longitude[myRows][noNA] <- pt$Easting
-stations$Latitude[myRows][noNA] <- pt$Northing
+stations[myRows[yesNA],c("UK.AIR.ID", "Longitude", "Latitude")]
+stationsNew <- stations
+stationsNew$Longitude[myRows][noNA] <- pt$Longitude
+stationsNew$Latitude[myRows][noNA] <- pt$Latitude
 
 # Keep only stations with coordinates
-stations <- stations[-which(is.na(stations$Latitude) | is.na(stations$Longitude)),]
+noCoords <- which(is.na(stationsNew$Latitude) | is.na(stationsNew$Longitude))
+stationsNew <- stationsNew[-noCoords,]
 ```
 
 Check whether there are hourly data available
 ```R
-stations$SiteID <- getSiteID(stations$UK.AIR.ID)
-validStations <- which(!is.na(stations$SiteID))
-IDstationHdata <- stations$SiteID[validStations] 
+stationsNew$SiteID <- getSiteID(as.character(stationsNew$UK.AIR.ID))
+validStations <- which(!is.na(stationsNew$SiteID))
+IDstationHdata <- stationsNew$SiteID[validStations] 
 ```
 
-There are 6559 stations with valid coordinates within the UK-AIR (Air Information Resource, blue circles) database, for 221 (red circles) of them hourly data is available and their location is shown in the map below.
+There are 6563 stations with valid coordinates within the UK-AIR (Air Information Resource, blue circles) database, for 225 of them hourly data is available and their location is shown in the map below (red circle).
 
 ```R
 library(leaflet)
 leaflet(data = stationsNew) %>% addTiles() %>% 
   addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = 0.5) %>% 
   addCircleMarkers(lng = ~Longitude[validStations], 
-  lat = ~Latitude[validStations], radius = 0.5, color="red")
+                   lat = ~Latitude[validStations], 
+                   radius = 0.5, color="red", popup = ~SiteID[validStations])
 ```
 
-Pollution data started to be collected in 1972, and building the time series for a given station can be done in one line of code:
+How many of the above stations are in England?
+```R
+library(raster) 
+adm <- getData('GADM', country='GBR', level=1)
+England <- adm[adm$NAME_1=='England',]
+stationsSP <- SpatialPoints(stationsNew[, c('Longitude', 'Latitude')], 
+                            proj4string=CRS(proj4string(England)))
+
+library(sp)
+x <- over(stationsSP, England)[,1]
+x <- which(!is.na(x))
+
+library(leaflet)
+leaflet(data = stationsNew[x,]) %>% addTiles() %>% 
+  addCircleMarkers(lng = ~Longitude, lat = ~Latitude, 
+                   radius = 0.5, color="red", popup = ~SiteID)
+```
+
+Pollution data started to be collected in 1972, however hourly data is available only from XXXX. Building the time series for a given station can be done in one line of code:
 
 ```R
-df <- get1Hdata("ABD", years=1999:2016)
+df <- get1Hdata("ABD", years=1972:2016)
 ```
 
 Using parallel processing, the acquisition of data from hundreds of sites takes only few minutes:
