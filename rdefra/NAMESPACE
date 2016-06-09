@@ -5,6 +5,7 @@ importFrom(XML, xpathSApply)
 importFrom(XML, xmlGetAttr)
 importFrom(XML, xmlValue)
 importFrom(plyr, rbind.fill)
+importFrom(utils, read.csv)
 
 export(EastingNorthing)
 export(catalogue)

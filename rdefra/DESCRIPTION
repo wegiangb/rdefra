@@ -1,9 +1,9 @@
 Package: rdefra
 Type: Package
 Title: Get data from DEFRA website
-Version: 0.1
+Version: 0.2
 Date: 2016-02-24
-Author: Claudia Vitolo [aut, cre]
+Author: Claudia Vitolo [aut, cre], Andrew Russell [aut], Allan Tucker [aut]
 Maintainer: Claudia Vitolo <cvitolodev@gmail.com>
 URL: http://cvitolo.github.io/rdefra/
 BugReports: https://github.com/cvitolo/rdefra/issues
