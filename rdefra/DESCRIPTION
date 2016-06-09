@@ -1,13 +1,13 @@
 Package: rdefra
 Type: Package
-Title: An R package to interact with the UK AIR pollution database from DEFRA
+Title: Interact with the UK AIR pollution database from DEFRA
 Version: 0.1
 Date: 2016-02-24
 Author: Claudia Vitolo [aut, cre], Andrew Russell [aut], Allan Tucker [aut]
 Maintainer: Claudia Vitolo <cvitolodev@gmail.com>
-URL: http://cvitolo.github.io/rdefra/
-BugReports: https://github.com/cvitolo/rdefra/issues
-Description: Get data from DEFRA website. It basically scraps the HTML content.
+URL: https://github.com/cvitolo/r_rdefra
+BugReports: https://github.com/cvitolo/r_rdefra/issues
+Description: Get data from DEFRA's UK-AIR website. It basically scraps the HTML content.
 Depends: R (>= 2.10)
 Imports: RCurl, XML, plyr
 Encoding: UTF-8
