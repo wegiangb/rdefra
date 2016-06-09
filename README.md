@@ -1,13 +1,18 @@
 rdefra: an R package to interact with the UK AIR pollution database from DEFRA
 =======
 
+[![DOI](https://zenodo.org/badge/9118/cvitolo/r_rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/cvitolo/r_rdefra)
+[![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](http://cran.r-project.org/web/packages/rdefra)
+[![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
+[![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
+
 DEFRA serves air pollution data from a variety of monitoring networks. 
 
 There is no public API and this package just scrapes the website for information. 
 
 
 # Dependencies
-The rnrfa package is dependent on a number of CRAN packages. Install them first:
+The rdefra package is dependent on a number of CRAN packages. Install them first:
 
 ```R
 install.packages(c("RCurl", "XML", "plyr", "devtools", "rgdal", "sp"))
