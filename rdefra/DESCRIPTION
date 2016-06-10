@@ -1,6 +1,6 @@
 Package: rdefra
 Type: Package
-Title: Interact with the UK AIR pollution database from DEFRA
+Title: Interact with the UK AIR Pollution Database from DEFRA
 Version: 0.1
 Date: 2016-06-09
 Author: Claudia Vitolo [aut, cre], Andrew Russell [aut], Allan Tucker [aut]
