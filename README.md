@@ -10,7 +10,7 @@ DEFRA serves air pollution data from a variety of monitoring networks.
 
 There is no public API and this package just scrapes the website for information. 
 
-__To cite this software:__
+**To cite this software:** 
 Vitolo C., Russell A. and Tucker A. (2016). rdefra: Interact with the UK AIR pollution database from DEFRA. R package version 0.1. https://CRAN.R-project.org/package=rdefra. DOI: http://dx.doi.org/10.5281/zenodo.55270
 
 
