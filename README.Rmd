@@ -1,17 +1,24 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
+<!-- Edit the README.Rmd only!!! The README.md is generated automatically from README.Rmd. -->
 
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
 ---------------
 
+[![DOI](https://zenodo.org/badge/9118/kehraProject/r_rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/r_rdefra)
+[![Build Status](https://travis-ci.org/kehraProject/r_rdefra.svg)](https://travis-ci.org/kehraProject/r_rdefra.svg?branch=master)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](http://cran.r-project.org/web/packages/rdefra)
 [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
 [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
 
-```{r, echo = FALSE}
+```{r echo=FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
   comment = "#>",
-  fig.path = "README-",
+  collapse = TRUE,
+  warning = FALSE,
   message = FALSE
 )
 ```
@@ -67,7 +74,7 @@ stations <- catalogue()
 
 Some of these have no coordinates but Easting (E) and Northing (N) are available on the DEFRA website. Get E and N, transform them to latitude and longitude and populate the missing coordinates using the code below.
 
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 # Find stations with no coordinates
 myRows <- which(is.na(stations$Latitude) | is.na(stations$Longitude))
 # Get the ID of stations with no coordinates
@@ -80,7 +87,7 @@ yesNA <- which(is.na(EN$Easting) & is.na(EN$Northing))
 ```
 
 Create spatial points from metadata table (coordinates are in WGS84):
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 require(rgdal); require(sp)
 # Define spatial points
 pt <- EN[noNA,]
@@ -102,7 +109,7 @@ stationsNew <- stationsNew[-noCoords,]
 ```
 
 Check whether there are hourly data available
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 stationsNew$SiteID <- getSiteID(as.character(stationsNew$UK.AIR.ID))
 validStations <- which(!is.na(stationsNew$SiteID))
 IDstationHdata <- stationsNew$SiteID[validStations] 
@@ -122,7 +129,7 @@ leaflet(data = stationsNew) %>% addTiles() %>%
 ![UK-AIR monitoring stations (August 2016)](paper/MonitoringStations.png)
 
 How many of the above stations are in England and have hourly records?
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 stationsNew <- stationsNew[!is.na(stationsNew$SiteID),]
 
 library(raster) 
@@ -147,7 +154,7 @@ leaflet(data = stationsNew) %>% addTiles() %>%
 Pollution data started to be collected in 1972, building the time series for a given station can be done in one line of code:
 
 ```{r, cache = TRUE}
-df <- get1Hdata("BAR2", years=1972:2016)
+df <- get1Hdata("BTR3", years=2012:2016)
 ```
 
 Using parallel processing, the acquisition of data from hundreds of sites takes only few minutes:
