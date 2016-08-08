@@ -5,3 +5,7 @@
 tests/*
 *.Rproj
 *.tar.gz
+
+*.html
+README_cache/
+vignettes/rdefra_vignette_cache

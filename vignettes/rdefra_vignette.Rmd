@@ -1,0 +1,129 @@
+---
+title: "rdefra_vignette"
+author: "Claudia Vitolo"
+date: "3 August 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+Rdefra is an R package to retrieve air pollution data from the Air Information Resource (UK-AIR) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
+
+This package follows a logic similar to other packages such as waterData and rnrfa: sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `catalogue()`, missing stations' coordinates can be obtained using the function `EastingNorthing()`, and time series data related to different pollutants can be obtained using the function `get1Hdata()`.
+
+The package is designed to collect data efficiently. It allows to download multiple years of data for a single station with one line of code and, if used with the parallel package, allows the acquisition of data from hundreds of sites in only few minutes.
+
+# Dependencies
+The rdefra package and the examples in this vignette are dependent on a number of CRAN packages. Check for missing dependencies and install them:
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+packs <- c('RCurl', 'XML', 'plyr', 'rgdal', 'sp', 'devtools')
+new.packages <- packs[!(packs %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+library(devtools)
+```
+
+# Installation
+This package is currently under development and available via devtools:
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+install_github("cvitolo/r_rdefra", subdir = "rdefra")
+```
+
+Now, load the rdefra package:
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+library(rdefra)
+```
+
+# Functions
+DEFRA monitoring stations can be downloaded and filtered using the function `catalogue()`. A cached version (downloaded in Feb 2016) is in `data(stations)`.
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+# Get full catalogue
+stations <- catalogue()
+```
+
+Some of these have no coordinates but Easting (E) and Northing (N) are available on the DEFRA website. Get E and N, transform them to latitude and longitude and populate the missing coordinates using the code below.
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+# Find stations with no coordinates
+myRows <- which(is.na(stations$Latitude) | is.na(stations$Longitude))
+# Get the ID of stations with no coordinates
+stationList <- as.character(stations$UK.AIR.ID[myRows])
+# Scrape DEFRA website to get Easting/Northing
+EN <- EastingNorthing(stationList)
+# Only keep non-NA Easting/Northing coordinates
+noNA <- which(!is.na(EN$Easting) & !is.na(EN$Northing))
+yesNA <- which(is.na(EN$Easting) & is.na(EN$Northing))
+
+require(rgdal); require(sp)
+# Define spatial points
+pt <- EN[noNA,]
+coordinates(pt) <- ~Easting+Northing
+proj4string(pt) <- CRS("+init=epsg:27700")
+# Convert coordinates from British National Grid to WGS84
+pt <- data.frame(spTransform(pt, CRS("+init=epsg:4326"))@coords)  
+names(pt) <- c("Longitude", "Latitude")
+
+# Populate the catalogue with newly calculated coordinates
+stations[myRows[yesNA],c("UK.AIR.ID", "Longitude", "Latitude")]
+stationsNew <- stations
+stationsNew$Longitude[myRows][noNA] <- pt$Longitude
+stationsNew$Latitude[myRows][noNA] <- pt$Latitude
+
+# Keep only stations with coordinates
+noCoords <- which(is.na(stationsNew$Latitude) | is.na(stationsNew$Longitude))
+stationsNew <- stationsNew[-noCoords,]
+```
+
+Check whether there are hourly data available
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+stationsNew$SiteID <- getSiteID(as.character(stationsNew$UK.AIR.ID))
+validStations <- which(!is.na(stationsNew$SiteID))
+IDstationHdata <- stationsNew$SiteID[validStations] 
+```
+
+There are 6563 stations with valid coordinates within the UK-AIR (Air Information Resource, blue circles) database, for 225 of them hourly data is available and their location is shown in the map below (red circle).
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+library(leaflet)
+leaflet(data = stationsNew) %>% addTiles() %>% 
+  addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = 0.5) %>% 
+  addCircleMarkers(lng = ~Longitude[validStations], 
+                   lat = ~Latitude[validStations], 
+                   radius = 0.5, color="red", popup = ~SiteID[validStations])
+```
+
+How many of the above stations are in England and have hourly records?
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+stationsNew <- stationsNew[!is.na(stationsNew$SiteID),]
+
+library(raster) 
+adm <- getData('GADM', country='GBR', level=1)
+England <- adm[adm$NAME_1=='England',]
+stationsSP <- SpatialPoints(stationsNew[, c('Longitude', 'Latitude')], 
+                            proj4string=CRS(proj4string(England)))
+
+library(sp)
+x <- over(stationsSP, England)[,1]
+x <- which(!is.na(x))
+stationsNew <- stationsNew[x,]
+
+library(leaflet)
+leaflet(data = stationsNew) %>% addTiles() %>% 
+  addCircleMarkers(lng = ~Longitude, lat = ~Latitude, 
+                   radius = 0.5, color="red", popup = ~SiteID)
+```
+
+Pollution data started to be collected in 1972, building the time series for a given station can be done in one line of code:
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+df <- get1Hdata("BAR2", years=1972:2016)
+```
+
+Data retrieval can be also be performed in parallel, using the parallel package (see example in the README file).
