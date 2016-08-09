@@ -3,6 +3,16 @@ output:
   html_document: 
     keep_md: yes
 ---
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
 <!-- Edit the README.Rmd only!!! The README.md is generated automatically from README.Rmd. -->
 
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
@@ -14,15 +24,6 @@ rdefra: Interact with the UK AIR Pollution Database from DEFRA
 [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
 [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
 
-```{r echo=FALSE}
-knitr::opts_chunk$set(
-  comment = "#>",
-  collapse = TRUE,
-  warning = FALSE,
-  message = FALSE
-)
-```
-
 [Rdefra](https://cran.r-project.org/package=rdefra) is an R package to retrieve air pollution data from the Air Information Resource (UK-AIR) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 
 This package follows a logic similar to other packages such as [waterData](https://cran.r-project.org/package=waterdata) and [rnrfa](https://cran.r-project.org/package=rnrfa): sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `catalogue()`, missing stations' coordinates can be obtained using the function `EastingNorthing()`, and time series data related to different pollutants can be obtained using the function `get1Hdata()`.
@@ -32,7 +33,7 @@ The package is designed to collect data efficiently. It allows to download multi
 For similar functionalities see also the [openair](https://cran.r-project.org/package=openair) package, which relies on a local copy of the data on servers at King's College (UK).
 
 ### Dependencies
-The rdefra package is dependent on a number of CRAN packages. Check for missing dependencies and install them:
+The rdefra package depends on a number of CRAN packages. Check for missing dependencies and install them:
 
 ```R
 packs <- c('RCurl', 'XML', 'plyr', 'rgdal', 'sp', 'devtools')
@@ -175,7 +176,7 @@ stopCluster(cl)
 df <- rbind.fill(myList)
 ```
 
-## Meta
+### Meta
 
 * Please [report any issues or bugs](https://github.com/kehraProject/r_rdefra/issues).
 * License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
