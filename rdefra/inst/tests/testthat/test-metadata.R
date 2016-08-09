@@ -22,3 +22,49 @@ test_that("Is the DEFRA server running?", {
   closeAllConnections()
 
 })
+
+test_that("Is metadata catalogue up-to-date? If so, there should be at least 6568 stations.", {
+
+  x <- catalogue()
+
+  expect_that(dim(x)[1] >= 6568, equals(TRUE))
+
+  closeAllConnections()
+
+})
+
+test_that("Find easting and northing coordinates of a single site.", {
+
+  x <- EastingNorthing("UKA12536")
+
+  expect_that(all(names(x) == c("Easting", "Northing")), equals(TRUE))
+  expect_that(x[[1]] == 509500, equals(TRUE))
+  expect_that(x[[2]] == 201800, equals(TRUE))
+
+  y <- EastingNorthing(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
+
+  closeAllConnections()
+
+})
+
+test_that("Find easting and northing coordinates of multiple sites.", {
+
+  x <- EastingNorthing(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
+
+  expect_that(all(names(x) == c("Easting", "Northing")), equals(TRUE))
+  expect_that(all(x[[1]] == c(487639, 495503, 488750, 558864)), equals(TRUE))
+  expect_that(all(x[[2]] == c(158876, 158871, 159750, 146166)), equals(TRUE))
+
+  closeAllConnections()
+
+})
+
+test_that("Find site identification number from the UK AIR ID string.", {
+
+  x <- getSiteID("UKA00399")
+
+  expect_that(x == "ABD", equals(TRUE))
+
+  closeAllConnections()
+
+})

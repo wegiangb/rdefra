@@ -13,7 +13,7 @@ getSiteID(IDs)
 A named vector containing the site IDs.
 }
 \description{
-This function fetches the catalogue of monitoring stations from DEFRA's website.
+Given the UK AIR ID, this function fetches the catalogue of monitoring stations from DEFRA's website.
 }
 \examples{
 # getSiteID("UKA00399")

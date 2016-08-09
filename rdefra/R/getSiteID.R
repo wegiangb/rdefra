@@ -1,6 +1,6 @@
 #' Get site IDs for DEFRA stations
 #'
-#' @description This function fetches the catalogue of monitoring stations from DEFRA's website.
+#' @description Given the UK AIR ID, this function fetches the catalogue of monitoring stations from DEFRA's website.
 #'
 #' @param IDs An alphanumeric string (or vector of strings) containing the UK AIR ID defined by DEFRA.
 #'
