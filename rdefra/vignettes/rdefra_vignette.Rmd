@@ -86,7 +86,7 @@ validstationsRW <- which(!is.na(stationsRW$SiteID))
 IDstationHdata <- stationsRW$SiteID[validstationsRW] 
 ```
 
-There are `dim(stationsRW)[1]` stations with valid coordinates within the Reading/Wokingham Urban Area (blue circles), but hourly data is available only for `length(IDstationHdata)` of them  and their location is shown in the map below (red circle).
+There are `r dim(stationsRW)[1]` stations with valid coordinates within the Reading/Wokingham Urban Area (blue circles), but hourly data is available only for `r length(IDstationHdata)` of them  and their location is shown in the map below (red circle).
 
 ```{r, warning=FALSE, message=FALSE}
 library(leaflet)
