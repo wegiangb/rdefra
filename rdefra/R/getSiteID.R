@@ -22,11 +22,6 @@ getSiteID <- function(IDs){
 
 getSiteID_internal <- function(uka_id){
 
-  # library(RCurl)
-  # library(XML)
-  # uka_id <- "UKA00399"
-  # uka_id <- "UKA15910"
-
   rootURL <- "http://uk-air.defra.gov.uk/networks/site-info?"
 
   myURL <- paste(rootURL, "uka_id=", uka_id,

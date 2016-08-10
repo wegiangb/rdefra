@@ -13,25 +13,6 @@
 
 get1Hdata <- function(site_id, years){
 
-  # library(RCurl)
-  # library(XML)
-  # library(plyr)
-  # site_id <- "ABD"
-  # years <- 1972:2014
-
-  # Site with list of flat files
-  # rootURL <- "http://uk-air.defra.gov.uk/data/flat_files?"
-  # myURL <- paste(rootURL, "site_id=", site_id, sep = "")
-  # download html
-  # html <- getURL(myURL, followlocation = TRUE)
-  # parse html
-  # doc = htmlParse(html, asText=TRUE)
-  # hrefs <- xpathSApply(doc, '//*[@id="center-2col"]', xmlGetAttr, 'href')
-  # Otherwise
-  # html <- paste(readLines(myURL), collapse="\n")
-  # library(stringr)
-  # matched <- str_match_all(html, "<a href=\"(.*?)\"")
-
   if (length(as.list(years)) == 0) {
     message("Please insert a valid year (or sequence of years).")
     stop
@@ -44,7 +25,6 @@ get1Hdata <- function(site_id, years){
 
     for(myYear in as.list(years)){
 
-      # cat(myYear, '\n')
       df_tmp <- get1Hdata_internal(site_id, myYear)
 
       # only append to output if data retrieval worked

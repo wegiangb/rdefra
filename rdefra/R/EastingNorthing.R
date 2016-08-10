@@ -13,12 +13,6 @@
 
 EastingNorthing <- function(IDs){
 
-  # For testing:
-  # load packages
-  # library(RCurl)
-  # library(XML)
-  # IDs <- c("UKA12536", "UKA12536", "UKA12536")
-
   enDF <- do.call(rbind, lapply(X = as.list(IDs), FUN = EastingNorthing_internal))
 
   return(data.frame(enDF))
@@ -26,12 +20,6 @@ EastingNorthing <- function(IDs){
 }
 
 EastingNorthing_internal <- function(uka_id){
-
-  # For testing:
-  # load packages
-  # library(RCurl)
-  # library(XML)
-  # uka_id <- "UKA12536"
 
   rootURL <- "http://uk-air.defra.gov.uk/networks/site-info?uka_id="
 

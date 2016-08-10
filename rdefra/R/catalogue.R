@@ -26,9 +26,6 @@ catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
                       location_type = 9999, search = "Search+Network",
                       view = "advanced", action = "results"){
 
-  # library(RCurl)
-  # library(XML)
-
   rootURL <- "http://uk-air.defra.gov.uk/networks/find-sites?"
 
   myURL <- paste(rootURL, "&site_name=", site_name, "&pollutant=", pollutant,
