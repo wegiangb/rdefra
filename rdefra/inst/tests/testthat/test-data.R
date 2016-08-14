@@ -1,5 +1,19 @@
 context("Data")
 
+test_that("Are hourly data for station ABD/2014 available?", {
+
+  site_id <- "ABD"
+  years <- 2014
+
+  rootURL <- "https://uk-air.defra.gov.uk/data_files/site_data/"
+  myURL <- paste(rootURL, site_id, "_", years, ".csv", sep = "")
+
+  expect_that(http_error(myURL), equals(FALSE))
+
+  closeAllConnections()
+
+})
+
 test_that("Are hourly data for station BTR3 available?", {
 
   site_id = "BTR3"
@@ -17,12 +31,27 @@ test_that("Are hourly data for station BTR3 available?", {
 
 })
 
+test_that("Is data in the right format?", {
+
+  site_id <- "ABD"
+  years <- 2014
+
+  x <- ukair_get_hourly_data(site_id, years)
+
+  expect_that(names(x)[1] == "datetime", equals(TRUE))
+  expect_that(names(x)[2] == "SiteID", equals(TRUE))
+  closeAllConnections()
+
+})
+
+testthat::skip_on_cran()
 test_that("Try and retrieve hourly data", {
 
-  x <- get1Hdata("ABD", "2014")
+  x <- ukair_get_hourly_data(site_id = "ABD", years = "2014")
 
   # dput(x, 'rdefra/inst/tests/testthat/example01')
-  y <- dget(system.file(package = 'rdefra', 'inst/tests/testthat/example01'))
+  y <- as_tibble(dget(system.file(package = 'rdefra',
+                                  'inst/tests/testthat/example01')))
 
   # This function returns TRUE wherever elements are the same, including NA's,
   # and FALSE everywhere else.
@@ -32,8 +61,8 @@ test_that("Try and retrieve hourly data", {
     return(same)
   }
 
-  expect_that(x$site_id[1] == "ABD", equals(TRUE))
-  expect_that(x$Date[[1]] == "01-01-2014", equals(TRUE))
+  expect_that(x$SiteID[[1]] == "ABD", equals(TRUE))
+  expect_that(x$datetime[1], equals(ymd_hms("2014-01-01 01:00:00 UTC")))
   expect_that(dim(x)[1] >= 8760, equals(TRUE))
 
   expect_that(all(compareNA(x[,1], y[,1])), equals(TRUE))
@@ -48,7 +77,6 @@ test_that("Try and retrieve hourly data", {
   expect_that(all(compareNA(x[,10], y[,10])), equals(TRUE))
   expect_that(all(compareNA(x[,11], y[,11])), equals(TRUE))
   expect_that(all(compareNA(x[,12], y[,12])), equals(TRUE))
-  expect_that(all(compareNA(x[,13], y[,13])), equals(TRUE))
 
   closeAllConnections()
 

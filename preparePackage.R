@@ -1,6 +1,11 @@
+# Generate a template for a README.Rmd
+devtools::use_readme_rmd('rdefra')
+# Generate a template for a Code of Conduct
+devtools::use_code_of_conduct('rdefra')
+
 # Create a compressed version for the dataset 'regions'
-load("~/regions.rda")
-tools::checkRdaFiles("~/regions.rda")
+load("~/Dropbox/Repos/r_rdefra/extraData/regions.rda")
+tools::checkRdaFiles("~/Dropbox/Repos/r_rdefra/extraData/regions.rda")
 
 save(regions,
      file='~/Dropbox/Repos/r_rdefra/extraData/regions.rda',
@@ -8,18 +13,20 @@ save(regions,
 # or, to compress in place: tools::resaveRdaFiles(paths = '~/Dropbox/Repos/r_rdefra/extraData/regions.rda', compress = 'xz')
 
 # Create a compressed version for the dataset 'stations'
-load("~/stations.rda")
-tools::checkRdaFiles("~/stations.rda")
+load("~/Dropbox/Repos/r_rdefra/rdefra/data/stations.rda")
+tools::checkRdaFiles("~/Dropbox/Repos/r_rdefra/rdefra/data/stations.rda")
 
 save(stations,
      file='~/Dropbox/Repos/r_rdefra/rdefra/data/stations.rda',
      compress='gzip')
 
-# Run unit tests using testthat
-devtools::test('rdefra')
+# Check spelling mistakes
+devtools::spell_check('rdefra',
+                      ignore = c('metres', 'catalogue', 'DEFRA', 'EMEP',
+                                 'EPSG', 'WGS'))
 
-# Run R CMD check or devtools::check()
+# Run R CMD check
 devtools::check('rdefra')
 
-# Generate a template for a README.Rmd
-devtools::use_readme_rmd()
+# Run unit tests using testthat
+devtools::test('rdefra')

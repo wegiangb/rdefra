@@ -15,9 +15,9 @@ test_that("Is the DEFRA server running?", {
                  location_type, "&search=", search, "&view=",
                  view, "&action=", action, sep = "")
 
-  con.url <- try(url(myURL))
-
-  expect_that(inherits(con.url, "try-error"), equals(FALSE))
+  # download html
+  html <- GET(myURL)
+  expect_that(http_error(html), equals(FALSE))
 
   closeAllConnections()
 
@@ -25,7 +25,7 @@ test_that("Is the DEFRA server running?", {
 
 test_that("Is metadata catalogue up-to-date? If so, there should be at least 6568 stations.", {
 
-  x <- catalogue()
+  x <- ukair_catalogue()
 
   expect_that(dim(x)[1] >= 6568, equals(TRUE))
 
@@ -35,13 +35,13 @@ test_that("Is metadata catalogue up-to-date? If so, there should be at least 656
 
 test_that("Find easting and northing coordinates of a single site.", {
 
-  x <- EastingNorthing("UKA12536")
+  x <- ukair_get_coordinates("UKA12536")
 
   expect_that(all(names(x) == c("Easting", "Northing")), equals(TRUE))
   expect_that(x[[1]] == 509500, equals(TRUE))
   expect_that(x[[2]] == 201800, equals(TRUE))
 
-  y <- EastingNorthing(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
+  y <- ukair_get_coordinates(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
 
   closeAllConnections()
 
@@ -49,7 +49,7 @@ test_that("Find easting and northing coordinates of a single site.", {
 
 test_that("Find easting and northing coordinates of multiple sites.", {
 
-  x <- EastingNorthing(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
+  x <- ukair_get_coordinates(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
 
   expect_that(all(names(x) == c("Easting", "Northing")), equals(TRUE))
   expect_that(all(x[[1]] == c(487639, 495503, 488750, 558864)), equals(TRUE))
@@ -61,7 +61,7 @@ test_that("Find easting and northing coordinates of multiple sites.", {
 
 test_that("Find site identification number from the UK AIR ID string.", {
 
-  x <- getSiteID("UKA00399")
+  x <- ukair_get_site_id("UKA00399")
 
   expect_that(x == "ABD", equals(TRUE))
 

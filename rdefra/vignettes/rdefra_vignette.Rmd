@@ -1,5 +1,5 @@
 ---
-title: "rdefra_vignette"
+title: "rdefra: Interact with the UK AIR Pollution Database from DEFRA"
 author: "Claudia Vitolo"
 date: "3 August 2016"
 output: html_document
@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-Rdefra is an R package to retrieve air pollution data from the Air Information Resource (UK-AIR) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
+The package rdefra allows to retrieve air pollution data from the Air Information Resource (UK-AIR, https://uk-air.defra.gov.uk/) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 
-This package follows a logic similar to other packages such as waterData and rnrfa: sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `catalogue()`, missing stations' coordinates can be obtained using the function `EastingNorthing()`, and time series data related to different pollutants can be obtained using the function `get1Hdata()`.
+This package follows a logic similar to other packages such as waterData and rnrfa: sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `ukair_catalogue()`, missing stations' coordinates can be obtained using the function `ukair_get_coordinates()`, and time series data related to different pollutants can be obtained using the function `ukair_get_hourly_data()`.
 
 The package is designed to collect data efficiently. It allows to download multiple years of data for a single station with one line of code and, if used with the parallel package, allows the acquisition of data from hundreds of sites in only few minutes.
 
@@ -26,7 +26,7 @@ The package is designed to collect data efficiently. It allows to download multi
 The rdefra package and the examples in this vignette are dependent on a number of CRAN packages. Check for missing dependencies and install them:
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
-packs <- c('RCurl', 'XML', 'parallel', 'plyr', 'rgdal', 'sp', 'devtools')
+packs <- c('RCurl', 'XML', 'parallel', 'dplyr', 'rgdal', 'sp', 'devtools')
 new.packages <- packs[!(packs %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 ```
@@ -34,34 +34,34 @@ if(length(new.packages)) install.packages(new.packages)
 # Installation
 This package is currently under development and available via devtools:
 
-```{r, warning = FALSE, message = FALSE}
+```{r, eval=FALSE}
 devtools::install_github("cvitolo/r_rdefra", subdir = "rdefra")
 ```
 
 Now, load the rdefra package:
 
-```{r, warning = FALSE, message = FALSE}
+```{r}
 library(rdefra)
 ```
 
 # Functions
-DEFRA monitoring stations can be downloaded and filtered using the function `catalogue()`. A cached version (downloaded in Feb 2016) is in `data(stations)`.
+DEFRA monitoring stations can be downloaded and filtered using the function `ukair_catalogue()`. As the network expands, metadata for new stations will be added. A cached version (downloaded in Feb 2016 and containing metadata for 6563 stations) is in `data(stations)`.
 
-```{r, warning = FALSE, message = FALSE}
+```{r}
 # Get full catalogue
-stations <- catalogue()
+stations <- ukair_catalogue()
 ```
 
 Some of these have no coordinates but Easting (E) and Northing (N) are available on the DEFRA website. In the example below, we get the missing coordinates for all the stations in Northern Ireland:
 
-```{r, warning = FALSE, message = FALSE}
+```{r}
 stationsRW <- stations[which(stations$Zone == "Reading/Wokingham Urban Area"),]
 # Find stations with no coordinates
 myRows <- which(is.na(stationsRW$Latitude) | is.na(stationsRW$Longitude))
 # Get the ID of stations with no coordinates
 stationList <- as.character(stationsRW$UK.AIR.ID[myRows])
 # Scrape DEFRA website to get Easting/Northing
-EN <- EastingNorthing(stationList)
+EN <- ukair_get_coordinates(stationList)
 # Only keep non-NA Easting/Northing coordinates
 noNA <- which(!is.na(EN$Easting) & !is.na(EN$Northing))
 
@@ -80,15 +80,20 @@ stationsRW$Latitude[myRows][noNA] <- pt$Latitude
 ```
 
 Check whether there are hourly data available
-```{r, warning=FALSE, message=FALSE}
-stationsRW$SiteID <- getSiteID(as.character(stationsRW$UK.AIR.ID))
+```{r}
+stationsRW$SiteID <- ukair_get_site_id(as.character(stationsRW$UK.AIR.ID))
 validstationsRW <- which(!is.na(stationsRW$SiteID))
 IDstationHdata <- stationsRW$SiteID[validstationsRW] 
 ```
 
-There are `r dim(stationsRW)[1]` stations with valid coordinates within the Reading/Wokingham Urban Area (blue circles), but hourly data is available only for `r length(IDstationHdata)` of them  and their location is shown in the map below (red circle).
+There are `r dim(stationsRW)[1]` stations with valid coordinates within the Reading/Wokingham Urban Area (blue circles), but hourly data is available only for `r length(IDstationHdata)` of them.
+```{r}
+as_tibble(stationsRW[validstationsRW,])
+```
 
-```{r, warning=FALSE, message=FALSE}
+Their location is shown in the map below (red circle).
+
+```{r}
 library(leaflet)
 leaflet(data = stationsRW) %>% addTiles() %>% 
   addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = 0.5) %>% 
@@ -97,17 +102,17 @@ leaflet(data = stationsRW) %>% addTiles() %>%
                    radius = 0.5, color="red", popup = ~SiteID[validstationsRW])
 ```
 
-Pollution data started to be collected in 1972, building the time series for a given station can be done in one line of code:
+Pollution data started to be collected in 1972 and consists of hourly concentration of various species (in &#956;g/m<sup>3</sup>), such as ozone (O<sub>3</sub>), particulate matters (PM<sub>2.5</sub> and PM<sub>10</sub>), nitrogen dioxide (NO<sub>2</sub>), sulphur dioxide (SO<sub>2</sub>), and so on. Building the time series for a given station can be done in one line of code
 
 ```{r, warning=FALSE, message=FALSE}
-df <- get1Hdata(IDstationHdata[1], years=1972:2016)
+df <- ukair_get_hourly_data(IDstationHdata[1], years=1972:2016)
 ```
 
 Data retrieval can be also be performed in parallel, using the parallel package:
 
 ```{r, eval=FALSE}
 library(parallel)
-library(plyr)
+library(dplyr)
 
 # Calculate the number of cores
 no_cores <- ifelse(detectCores() > 1,  detectCores() - 1, 1)
@@ -115,9 +120,9 @@ no_cores <- ifelse(detectCores() > 1,  detectCores() - 1, 1)
 # Initiate cluster
 cl <- makeCluster(no_cores)
 
-myList <- parLapply(cl, IDstationHdata, get1Hdata, years=1972:2016)
+myList <- parLapply(cl, IDstationHdata, ukair_get_hourly_data, years=1972:2016)
 
 stopCluster(cl)
 
-df <- rbind.fill(myList)
+df <- rbind_all(myList)
 ```
