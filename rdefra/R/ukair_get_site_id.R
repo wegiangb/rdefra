@@ -18,7 +18,7 @@ ukair_get_site_id <- function(IDs){
 
   IDs <- as.character(IDs)
 
-  enDF <- do.call(rbind, lapply(X = as.list(IDs), FUN = ukair_get_site_id_internal))
+  enDF <- t(sapply(IDs, ukair_get_site_id_internal))
 
   return(as.character(enDF))
 
@@ -26,30 +26,36 @@ ukair_get_site_id <- function(IDs){
 
 #' Internal function to get site IDs for 1 DEFRA station
 #'
-#' @importFrom httr GET
-#' @importFrom XML htmlParse xpathSApply xmlGetAttr
+#' @importFrom httr GET content
+#' @importFrom xml2 xml_attr xml_find_all
 #'
 #' @noRd
 #'
 
 ukair_get_site_id_internal <- function(uka_id){
 
-  rootURL <- "http://uk-air.defra.gov.uk/networks/site-info?"
+  page_fetch <- httr::GET(url = "http://uk-air.defra.gov.uk",
+                          path = "networks/site-info",
+                          query = list(uka_id = uka_id,
+                                       search = "View+Site+Information",
+                                       action = "site"))
 
-  myURL <- paste(rootURL, "uka_id=", uka_id,
-                 "&search=View+Site+Information&action=site", sep = "")
+  # download content
+  page_content <- httr::content(page_fetch)
 
-  # download html
-  html <- httr::GET(myURL)
-
-  # parse html
-  doc = XML::htmlParse(html, asText=TRUE)
-  hrefs <- XML::xpathSApply(doc, '//*[@id="g4"]/td[4]/a[4]', XML::xmlGetAttr, 'href')
+  # Extract tab row containing Easting and Northing
+  page_tab <- xml2::xml_find_all(page_content, '//*[@id="g4"]/td[4]/a[4]')
+  hrefs <- xml2::xml_attr(page_tab, 'href')
 
   if(is.null(hrefs)){
+
     siteID <- NA
+    message("No ID available for the specified station")
+
   }else{
-    siteID <- gsub("^.*\\=", "", hrefs)
+
+      siteID <- gsub("^.*\\=", "", hrefs)
+
   }
 
   return(siteID)

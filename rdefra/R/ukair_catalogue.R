@@ -1,8 +1,8 @@
 #' Get DEFRA UK-AIR stations metadata
 #'
-#' @importFrom httr GET
+#' @importFrom httr GET content
 #' @importFrom utils read.csv
-#' @importFrom XML htmlParse xpathSApply xmlGetAttr
+#' @importFrom xml2 xml_find_first xml_attr
 #' @importFrom lubridate dmy_hm ymd
 #' @importFrom tibble as_tibble
 #'
@@ -35,28 +35,43 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
                       closed = "true", country_id = 9999, region_id = 9999,
                       location_type = 9999){
 
-  baseURL <- "http://uk-air.defra.gov.uk/networks/find-sites?"
+  # Any NULL elements of the list supplied to the query paramater are
+  # automatically dropped
+  catalogue_fetch <- httr::GET(url = "http://uk-air.defra.gov.uk",
+                               path = "networks/find-sites",
+                               query = list(site_name = site_name,
+                                            pollutant = pollutant,
+                                            group_id = group_id,
+                                            closed = closed,
+                                            country_id = country_id,
+                                            region_id = region_id,
+                                            location_type = location_type,
+                                            search = "Search+Network",
+                                            view = "advanced",
+                                            action = "results"))
 
-  arg_list <- list("site_name" = site_name, "pollutant" = pollutant,
-                   "group_id" = group_id, "closed" = closed,
-                   "country_id" = country_id, "region_id" = region_id,
-                   "location_type" = location_type, "search" = "Search+Network",
-                   "view" = "advanced", "action" = "results")
+  # download content
+  catalogue_content <- httr::content(catalogue_fetch)
 
-  # download html
-  html <- httr::GET(baseURL, query = arg_list) # Any NULL elements of the list supplied to the query paramater are automatically dropped
+  # Extract csv link
+  catalogue_csv_link <- xml2::xml_find_first(catalogue_content,
+                                             "//*[contains(@class,'bCSV')]")
+  catalogue_csv_link <- xml2::xml_attr(catalogue_csv_link, "href")
 
-  # parse html
-  doc = XML::htmlParse(html, asText=TRUE)
-  hrefs <- XML::xpathSApply(doc, '//*[@id="center-2col"]/p[3]/a',
-                            XML::xmlGetAttr, 'href')
+  if (!is.na(catalogue_csv_link)) {
 
-  df <- utils::read.csv(hrefs)
-  # Convert data.frame columns from factors to characters
-  df[] <- lapply(df, as.character)
+    df <- utils::read.csv(catalogue_csv_link)
+    # Convert data.frame columns from factors to characters
+    df[] <- lapply(df, as.character)
 
-  df$Start.Date <- lubridate::ymd(df$Start.Date)
-  df$End.Date <- lubridate::ymd(df$End.Date)
+    df$Start.Date <- lubridate::ymd(df$Start.Date)
+    df$End.Date <- lubridate::ymd(df$End.Date)
+
+  }else{
+
+    stop("No metadata available for the specified query")
+
+  }
 
   return(tibble::as_tibble(df))
 

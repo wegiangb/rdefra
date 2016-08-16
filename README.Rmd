@@ -67,7 +67,7 @@ library(rdefra)
 ```
 
 ### Functions
-DEFRA monitoring stations can be downloaded and filtered using the function `ukair_catalogue()`. A cached version (downloaded in Feb 2016) is in `data(stations)`.
+DEFRA monitoring stations can be downloaded and filtered using the function `ukair_catalogue()`. A cached version (downloaded in August 2016) is in `data(stations)`.
 
 ```{r}
 # Get full catalogue
@@ -132,7 +132,7 @@ leaflet(data = stationsNew) %>% addTiles() %>%
 ![UK-AIR monitoring stations (August 2016)](paper/MonitoringStations.png)
 
 How many of the above stations are in England and have hourly records?
-```{r, eval = FALSE}
+```{r}
 stationsNew <- stationsNew[!is.na(stationsNew$SiteID),]
 
 library(raster) 

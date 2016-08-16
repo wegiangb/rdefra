@@ -28,7 +28,9 @@ ukair_get_hourly_data <- function(site_id = NULL,
 
   if (is.null(site_id)) {
 
-    stop("Please insert a valid ID. \nFor a list of valid IDs check the SiteID column in the cached catalogue: \n data(stations) \n na.omit(unique(stations$SiteID))")
+    stop("Please insert a valid ID.
+         \nFor a list of valid IDs check the SiteID column in the cached
+         catalogue: \n data(stations) \n na.omit(unique(stations$SiteID))")
 
   }
 
@@ -43,12 +45,13 @@ ukair_get_hourly_data <- function(site_id = NULL,
 
   for(myYear in as.list(years)){
 
+    id <- which(as.list(years) == myYear)
+
     df_tmp <- ukair_get_hourly_data_internal(site_id, myYear, keepUnits)
 
     # only append to output if data retrieval worked
     if(!is.null(df_tmp)){
       dat[[id]] <- df_tmp
-      id <- id + 1
     }
 
   }
@@ -61,10 +64,9 @@ ukair_get_hourly_data <- function(site_id = NULL,
 
   if (is.null(newDAT)) {
 
-    message(paste("There are no data available for ",
+    message(paste0("There are no data available for ",
                   site_id, " in ", paste(years, collapse = "-"),
-                  ". Return NULL object.",
-                  sep = ""))
+                  ". Return NULL object."))
 
   }
 
@@ -84,18 +86,28 @@ ukair_get_hourly_data <- function(site_id = NULL,
 ukair_get_hourly_data_internal <- function(site_id, myYears, keepUnits){
 
   rootURL <- "https://uk-air.defra.gov.uk/data_files/site_data/"
-  myURL <- paste(rootURL, site_id, "_", myYears, ".csv", sep = "")
+  myURL <- paste0(rootURL, site_id, "_", myYears, ".csv")
 
-  if (!http_error(myURL)){
-    df <- utils::read.csv(myURL, skip = 4)[-c(1),]
+  df <- try(read.csv(myURL, skip = 4)[-c(1),])
+
+  if(class(df) == "try-error"){
+
+    newDF <- NULL
+    message(paste("No data available for station",site_id))
+
+  }else{
 
     if (keepUnits){
+
       # Remove status and keep units columns
       col2rm <- which(substr(names(df),1,6) == "status")
+
     }else{
+
       # Remove status and units columns
       col2rm <- which(substr(names(df),1,6) == "status" |
                         substr(names(df),1,4) == "unit")
+
     }
 
     df <- df[, -col2rm]
@@ -108,12 +120,8 @@ ukair_get_hourly_data_internal <- function(site_id, myYears, keepUnits){
                    "SiteID" = site_id,
                    df[,3:dim(df)[2]])
 
-  }else{
-
-    newDF <- NULL
+    return(newDF)
 
   }
-
-  return(newDF)
 
 }

@@ -26,7 +26,7 @@ This package follows a logic similar to other packages such as waterData[@waterd
 
 The package is designed to collect data efficiently. It allows to download multiple years of data for a single station with one line of code and, if used with the parallel package [@R-base], allows the acquisition of data from hundreds of sites in only few minutes.
 
-The figure below shows the 6563 stations with valid coordinates within the UK-AIR (blue circles) database, for 225 of them hourly data is available and their location is shown as red circles.
+The figure below shows the 6566 stations with valid coordinates within the UK-AIR (blue circles) database, for 225 of them hourly data is available and their location is shown as red circles.
 
 ![UK-AIR monitoring stations (August 2016)](MonitoringStations.png)
 

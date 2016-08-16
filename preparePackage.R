@@ -27,6 +27,5 @@ devtools::spell_check('rdefra',
 
 # Run R CMD check
 devtools::check('rdefra')
-
-# Run unit tests using testthat
-devtools::test('rdefra')
+# The above will also run the unit tests using testthat
+# devtools::test('rdefra')

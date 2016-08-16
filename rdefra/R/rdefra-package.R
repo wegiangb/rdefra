@@ -4,5 +4,4 @@
 #'
 #' @name rdefra
 #' @docType package
-#' @import httr XML dplyr
 NULL

@@ -45,7 +45,7 @@ library(rdefra)
 ```
 
 # Functions
-DEFRA monitoring stations can be downloaded and filtered using the function `ukair_catalogue()`. As the network expands, metadata for new stations will be added. A cached version (downloaded in Feb 2016 and containing metadata for 6563 stations) is in `data(stations)`.
+DEFRA monitoring stations can be downloaded and filtered using the function `ukair_catalogue()`. As the network expands, metadata for new stations will be added. A cached version (downloaded in August 2016 and containing metadata for 6566 stations) is in `data(stations)`.
 
 ```{r}
 # Get full catalogue
