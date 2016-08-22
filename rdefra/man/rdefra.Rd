@@ -6,6 +6,6 @@
 \alias{rdefra-package}
 \title{rdefra: Interact with the UK AIR Pollution Database from DEFRA}
 \description{
-The R package rdefra allows to retrieve air pollution data from the Air Information Resource (UK-AIR) of the Department for Environment, Food and Rural Affairs in the United Kingdom (see \url{https://uk-air.defra.gov.uk/}). UK-AIR does not provide public APIs for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
+The R package rdefra allows to retrieve air pollution data from the Air Information Resource (UK-AIR) of the Department for Environment, Food and Rural Affairs in the United Kingdom (see ). UK-AIR does not provide public APIs for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 }
 
