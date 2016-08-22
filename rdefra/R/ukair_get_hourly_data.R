@@ -1,15 +1,11 @@
 #' Get hourly data for DEFRA stations
 #'
-#' @importFrom dplyr rbind_all
-#' @importFrom tibble as_tibble
-#'
 #' @description This function fetches hourly data from DEFRA's air pollution monitoring stations.
 #'
 #' @param site_id This is the ID of a specific site.
 #' @param years Years for which data should be downloaded.
-#' @param keepUnits logical that if set to TRUE returns a column with unit after each column with measurements (this parameter is set to FALSE by default).
 #'
-#' @details The measurements are generally in ugm-3 (micrograms per cubic metre). Please double check the units before using these data.
+#' @details The measurements are generally in \eqn{\mug/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes, i.e. attr(output, "units"). Please double check the units on the DEFRA website, as they might change over time.
 #'
 #' @return A data.frame containing hourly pollution data.
 #'
@@ -17,14 +13,19 @@
 #'
 #' @examples
 #'  \dontrun{
-#'  ukair_get_hourly_data("ABD", 2014)
-#'  ukair_get_hourly_data("ABD", 2014:2016)
+#'  # Get data for 1 year
+#'  output <- ukair_get_hourly_data("ABD", 2014)
+#'
+#'  # Get data for multiple years
+#'  output <- ukair_get_hourly_data("ABD", 2014:2016)
+#'
+#'  # check units
+#'  attr(output, "units")
 #'  }
 #'
 
 ukair_get_hourly_data <- function(site_id = NULL,
-                                  years = NULL,
-                                  keepUnits = FALSE){
+                                  years = NULL){
 
   if (is.null(site_id)) {
 
@@ -47,7 +48,7 @@ ukair_get_hourly_data <- function(site_id = NULL,
 
     id <- which(as.list(years) == myYear)
 
-    df_tmp <- ukair_get_hourly_data_internal(site_id, myYear, keepUnits)
+    df_tmp <- ukair_get_hourly_data_internal(site_id, myYear)
 
     # only append to output if data retrieval worked
     if(!is.null(df_tmp)){
@@ -60,7 +61,7 @@ ukair_get_hourly_data <- function(site_id = NULL,
   torm <- unlist(lapply(dat, is.null))
   dat <- dat[!torm]
 
-  newDAT <- dplyr::rbind_all(dat)
+  newDAT <- dplyr::bind_rows(dat)
 
   if (is.null(newDAT)) {
 
@@ -83,7 +84,7 @@ ukair_get_hourly_data <- function(site_id = NULL,
 #' @noRd
 #'
 
-ukair_get_hourly_data_internal <- function(site_id, myYears, keepUnits){
+ukair_get_hourly_data_internal <- function(site_id, myYears){
 
   rootURL <- "https://uk-air.defra.gov.uk/data_files/site_data/"
   myURL <- paste0(rootURL, site_id, "_", myYears, ".csv")
@@ -97,18 +98,16 @@ ukair_get_hourly_data_internal <- function(site_id, myYears, keepUnits){
 
   }else{
 
-    if (keepUnits){
+    # Build the attribute table to store units
+    colUnits <- which(substr(names(df),1,4) == "unit")
+    colVars <- colUnits - 2
+    units <- tibble::tibble("variable" = names(df)[colVars],
+                            "unit" = as.character(unlist(df[1,colUnits])))
+    attr(df, "units") <- units
 
-      # Remove status and keep units columns
-      col2rm <- which(substr(names(df),1,6) == "status")
-
-    }else{
-
-      # Remove status and units columns
-      col2rm <- which(substr(names(df),1,6) == "status" |
-                        substr(names(df),1,4) == "unit")
-
-    }
+    # Remove status and units columns
+    col2rm <- which(substr(names(df),1,6) == "status" |
+                      substr(names(df),1,4) == "unit")
 
     df <- df[, -col2rm]
 
@@ -116,7 +115,8 @@ ukair_get_hourly_data_internal <- function(site_id, myYears, keepUnits){
     df$time <- as.character(df$time)
     df$time[which(df$time == "24:00")] <- "00:00"
 
-    newDF <- cbind("datetime" = lubridate::dmy_hm(paste(df$Date, df$time)),
+    newDF <- cbind("datetime" = lubridate::dmy_hm(paste(df$Date, df$time,
+                                                        tz = "Europe/London")),
                    "SiteID" = site_id,
                    df[,3:dim(df)[2]])
 

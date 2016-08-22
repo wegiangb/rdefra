@@ -1,25 +1,72 @@
 #' Get DEFRA UK-AIR stations metadata
 #'
-#' @importFrom httr GET content
-#' @importFrom utils read.csv
-#' @importFrom xml2 xml_find_first xml_attr
-#' @importFrom lubridate dmy_hm ymd
-#' @importFrom tibble as_tibble
-#'
 #' @description This function fetches the catalogue of monitoring stations from DEFRA's website.
 #'
-#' @param site_name This is the name of a specific site (by default this is left blank to get info on all the available sites.
+#' @param site_name This is the name of a specific site. By default this is left blank to get info on all the available sites.
 #' @param pollutant This is a number from 1 to 10. Default is 9999, which means all the pollutants.
 #' @param group_id This is the identification number of a group of stations. Default is 9999 which means all available networks.
 #' @param closed This is "true" to include closed stations, "false" otherwise.
 #' @param country_id This is the identification number of the country, it can be a number from 1 to 6. Default is 9999, which means all the countries.
 #' @param region_id This is the identification number of the region. 1 = Aberdeen City, etc. (for the full list see \url{https://uk-air.defra.gov.uk/}). Default is 9999, which means all the local authorities.
-#' @param location_type This is the identification number of the location. Default is 9999, which means all the location types.
 #'
 #' @details
-#' \code{Pollutant} is defined based on the following convention: 1 = Ozone (O3), 2 = Nitrogen oxides (NOx), 3 = Carbon monoxide (CO), 4 = Sulphur dioxide (SO2), 5 = Particulate Matter (PM10), 6 = Particulate Matter (PM2.5), 7 = PAHs, 8 = Metals in PM10, 9 = Benzene, 10 = Black Carbon.
-#' \code{group_id} is defined based on the following convention: 1 = UKEAP: Precip-Net, 2 = Air Quality Strategy Pollutants, 3 = Ammonia and Nitric Acid, 4 = Automatic Urban and Rural Monitoring Network (AURN), 5 = Dioxins and Furans, 6 = Black Smoke & SO2, 7 = Automatic Hydrocarbon Network, 8 = Heavy Metals, 9 = Nitrogen Dioxide Diffusion Tube, 10 = PAH Andersen, 11 = Particle Size Composition, 12 = PCBs, 13 = TOMPs, 14 = Non-Automatic Hydrocarbon Network, 15 = 1,3-Butadiene Diffusion Tube, 16 = Black Carbon, 17 = Automatic Urban and Rural Monitoring Network (AURN), 18 = Defra NO2 Diffusion Tube, 19 = PAH Digitel (solid phase), 20 = PAH Digitel (solid+vapour), 21 = PAH Deposition, 22 = Particle size and number, 23 = Rural Automatic Mercury network, 24 = Urban Sulphate, 25 = UKEAP: Rural NO2, 26 = Automatic Urban and Rural Monitoring Network (AURN), 27 = UKEAP: National Ammonia Monitoring Network, 28 = UKEAP: Acid Gases & Aerosol Network, 29 = Particle Speciation (MARGA), 30 = UKEAP: Historic Aerosol measurements.
-#' \code{country_id} is defined based on the following convention: 1 = England, 2 = Wales, 3 = Scotland, 4 = Northern Ireland, 5 = Republic of Ireland, 6 = Channel Islands.
+#' The argument \code{Pollutant} is defined based on the following convention:
+#' \itemize{
+#'  \item{1 = Ozone (O3)}
+#'  \item{2 = Nitrogen oxides (NOx)}
+#'  \item{3 = Carbon monoxide (CO)}
+#'  \item{4 = Sulphur dioxide (SO2)}
+#'  \item{5 = Particulate Matter (PM10)}
+#'  \item{6 = Particulate Matter (PM2.5)}
+#'  \item{7 = PAHs}
+#'  \item{8 = Metals in PM10}
+#'  \item{9 = Benzene}
+#'  \item{10 = Black Carbon}
+#' }
+#'
+#' The argument \code{group_id} is defined based on the following convention:
+#' \itemize{
+#'  \item{1 = UKEAP: Precip-Net}
+#'  \item{2 = Air Quality Strategy Pollutants}
+#'  \item{3 = Ammonia and Nitric Acid}
+#'  \item{4 = Automatic Urban and Rural Monitoring Network (AURN)}
+#'  \item{5 = Dioxins and Furans}
+#'  \item{6 = Black Smoke & SO2}
+#'  \item{7 = Automatic Hydrocarbon Network}
+#'  \item{8 = Heavy Metals}
+#'  \item{9 = Nitrogen Dioxide Diffusion Tube}
+#'  \item{10 = PAH Andersen}
+#'  \item{11 = Particle Size Composition}
+#'  \item{12 = PCBs}
+#'  \item{13 = TOMPs}
+#'  \item{14 = Non-Automatic Hydrocarbon Network}
+#'  \item{15 = 1,3-Butadiene Diffusion Tube}
+#'  \item{16 = Black Carbon}
+#'  \item{17 = Automatic Urban and Rural Monitoring Network (AURN)}
+#'  \item{18 = Defra NO2 Diffusion Tube}
+#'  \item{19 = PAH Digitel (solid phase)}
+#'  \item{20 = PAH Digitel (solid+vapour)}
+#'  \item{21 = PAH Deposition}
+#'  \item{22 = Particle size and number}
+#'  \item{23 = Rural Automatic Mercury network}
+#'  \item{24 = Urban Sulphate}
+#'  \item{25 = UKEAP: Rural NO2}
+#'  \item{26 = Automatic Urban and Rural Monitoring Network (AURN)}
+#'  \item{27 = UKEAP: National Ammonia Monitoring Network}
+#'  \item{28 = UKEAP: Acid Gases & Aerosol Network}
+#'  \item{29 = Particle Speciation (MARGA)}
+#'  \item{30 = UKEAP: Historic Aerosol measurements}
+#' }
+#'
+#' The argument \code{country_id} is defined based on the following convention:
+#' \itemize{
+#'  \item{1 = England}
+#'  \item{2 = Wales}
+#'  \item{3 = Scotland}
+#'  \item{4 = Northern Ireland}
+#'  \item{5 = Republic of Ireland}
+#'  \item{6 = Channel Islands}
+#'  }
 #'
 #' @return A named vector containing Easting and Northing coordinates.
 #'
@@ -27,13 +74,24 @@
 #'
 #' @examples
 #'  \dontrun{
-#'  ukair_catalogue()
+#'  stations <- ukair_catalogue()
 #'  }
 #'
 
 ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
-                      closed = "true", country_id = 9999, region_id = 9999,
-                      location_type = 9999){
+                      closed = "true", country_id = 9999, region_id = 9999){
+
+  if (!(pollutant %in% 1:10 | pollutant == 9999)) {
+    stop("The parameter 'polluntant' is not set correctly, valid values are integers between 1 and 10 (see documentation) or 9999 (all pollutants).")
+  }
+
+  if (!(group_id %in% 1:30 | group_id == 9999)) {
+    stop("The parameter 'group_id' is not set correctly, valid values are integers between 1 and 30 (see documentation) or 9999 (all groups).")
+  }
+
+  if (!(country_id %in% 1:6 | country_id == 9999)) {
+    stop("The parameter 'country_id' is not set correctly, valid values are integers between 1 and 6 (see documentation) or 9999 (all countries).")
+  }
 
   # Any NULL elements of the list supplied to the query paramater are
   # automatically dropped
@@ -45,7 +103,7 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
                                             closed = closed,
                                             country_id = country_id,
                                             region_id = region_id,
-                                            location_type = location_type,
+                                            location_type = 9999,
                                             search = "Search+Network",
                                             view = "advanced",
                                             action = "results"))
@@ -64,15 +122,31 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
     # Convert data.frame columns from factors to characters
     df[] <- lapply(df, as.character)
 
-    df$Start.Date <- lubridate::ymd(df$Start.Date)
-    df$End.Date <- lubridate::ymd(df$End.Date)
+    df$Start.Date[df$Start.Date == "Unavailable"] <- NA
+    df$End.Date[df$End.Date == "Unavailable"] <- NA
+    df$Environment.Type[df$Environment.Type == "Unknown Unknown"] <- NA
+
+    # Change the blank cells to NA
+    # http://stackoverflow.com/questions/24172111/change-the-blank-cells-to-na
+    df <- data.frame(apply(df, 2, function(x) gsub("^$|^ $", NA, x)),
+                     stringsAsFactors = FALSE)
+
+    suppressWarnings(df$Start.Date <- lubridate::ymd(df$Start.Date,
+                                                     tz = "Europe/London"))
+
+    suppressWarnings(df$End.Date <- lubridate::ymd(df$End.Date,
+                                                   tz = "Europe/London"))
+
+    df$Latitude <- as.numeric(as.character(df$Latitude))
+    df$Longitude <- as.numeric(as.character(df$Longitude))
+    df$Altitude..m. <- as.numeric(as.character(df$Altitude..m.))
+
+    return(tibble::as_tibble(df))
 
   }else{
 
     stop("No metadata available for the specified query")
 
   }
-
-  return(tibble::as_tibble(df))
 
 }

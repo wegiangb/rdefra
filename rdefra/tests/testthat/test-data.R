@@ -49,63 +49,71 @@ test_that("Try and retrieve hourly data", {
 
   x <- ukair_get_hourly_data(site_id = "ABD", years = "2014")
 
-  expect_that(x$SiteID[[1]] == "ABD", equals(TRUE))
-  expect_that(x$datetime[1], equals(ymd_hms("2014-01-01 01:00:00 UTC")))
   expect_that(dim(x)[1] >= 8760, equals(TRUE))
 
-  expect_that(x[1,1], equals(structure(list(datetime = structure(1388538000,
-                                            class = c("POSIXct", "POSIXt"),
-                                            tzone = "UTC")),
-                                       .Names = "datetime",
-                                       class = c("tbl_df", "data.frame"),
-                                       row.names = c(NA, -1L))))
-  expect_that(x[1,2], equals(structure(list(SiteID = structure(1L,
-                                            .Label = "ABD",
-                                            class = "factor")),
-                                       .Names = "SiteID",
-                                       class = c("tbl_df", "data.frame"),
-                                       row.names = c(NA, -1L))))
+  expect_that(x[1,1], equals(structure(list(
+    datetime = structure(1388538000,
+                         class = c("POSIXct", "POSIXt"),
+                         tzone = "UTC")),
+    .Names = "datetime",
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
+  expect_that(x[1,2], equals(structure(list(
+    SiteID = structure(1L,
+                       .Label = "ABD",
+                       class = "factor")),
+    .Names = "SiteID",
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,3], equals(structure(list(
-                PM.sub.10..sub..particulate.matter..Hourly.measured. = 16.1),
-          .Names = "PM.sub.10..sub..particulate.matter..Hourly.measured.",
-          class = c("tbl_df", "data.frame"), row.names = c(NA, -1L))))
-  expect_that(x[1,4], equals(structure(list(Nitric.oxide = 1.6402),
-                                       .Names = "Nitric.oxide",
-                                       class = c("tbl_df", "data.frame"),
-                                       row.names = c(NA, -1L))))
-  expect_that(x[1,5], equals(structure(list(Nitrogen.dioxide = 11.28311),
-                                       .Names = "Nitrogen.dioxide",
-                                       class = c("tbl_df", "data.frame"),
-                                       row.names = c(NA, -1L))))
+    PM.sub.10..sub..particulate.matter..Hourly.measured. = 16.1),
+    .Names = "PM.sub.10..sub..particulate.matter..Hourly.measured.",
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
+  expect_that(x[1,4], equals(structure(list(
+    Nitric.oxide = 1.6402),
+    .Names = "Nitric.oxide",
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
+  expect_that(x[1,5], equals(structure(list(
+    Nitrogen.dioxide = 11.28311),
+    .Names = "Nitrogen.dioxide",
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,6], equals(structure(list(
     Nitrogen.oxides.as.nitrogen.dioxide = 13.79805),
     .Names = "Nitrogen.oxides.as.nitrogen.dioxide",
-    class = c("tbl_df", "data.frame"),
-    row.names = c(NA, -1L))))
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,7], equals(structure(list(
     Non.volatile.PM.sub.10..sub...Hourly.measured. = 15.1),
     .Names = "Non.volatile.PM.sub.10..sub...Hourly.measured.",
-    class = c("tbl_df", "data.frame"), row.names = c(NA, -1L))))
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,8], equals(structure(list(
     Non.volatile.PM.sub.2.5..sub...Hourly.measured. = 7.3),
     .Names = "Non.volatile.PM.sub.2.5..sub...Hourly.measured.",
-    class = c("tbl_df", "data.frame"), row.names = c(NA, -1L))))
-  expect_that(x[1,9], equals(structure(list(Ozone = 54.94827),
-                                       .Names = "Ozone",
-                                       class = c("tbl_df", "data.frame"),
-                                       row.names = c(NA, -1L))))
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
+  expect_that(x[1,9], equals(structure(list(
+    Ozone = 54.94827), .Names = "Ozone",
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,10], equals(structure(list(
     PM.sub.2.5..sub..particulate.matter..Hourly.measured. = 9.2),
     .Names = "PM.sub.2.5..sub..particulate.matter..Hourly.measured.",
-    class = c("tbl_df", "data.frame"), row.names = c(NA, -1L))))
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,11], equals(structure(list(
     Volatile.PM.sub.10..sub...Hourly.measured. = 1),
     .Names = "Volatile.PM.sub.10..sub...Hourly.measured.",
-    class = c("tbl_df", "data.frame"), row.names = c(NA, -1L))))
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
   expect_that(x[1,12], equals(structure(list(
     Volatile.PM.sub.2.5..sub...Hourly.measured. = 1.9),
     .Names = "Volatile.PM.sub.2.5..sub...Hourly.measured.",
-    class = c("tbl_df", "data.frame"), row.names = c(NA, -1L))))
+    row.names = c(NA, -1L),
+    class = c("tbl_df", "tbl", "data.frame"))))
 
   closeAllConnections()
 

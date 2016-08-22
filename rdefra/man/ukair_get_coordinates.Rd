@@ -4,21 +4,34 @@
 \alias{ukair_get_coordinates}
 \title{Get Easting and Northing coordinates from DEFRA}
 \usage{
-ukair_get_coordinates(IDs)
+ukair_get_coordinates(UK.AIR.ID, en = FALSE, force_coords = FALSE)
 }
 \arguments{
-\item{IDs}{An alphanumeric string (or vector of strings) containing the UK AIR ID defined by DEFRA.}
+\item{UK.AIR.ID}{contains the station identification code defined by DEFRA. It can be: a) an alphanumeric string, b) a vector of strings or c) a data frame. In the latter case, the column containing the codes should be named "UK.AIR.ID", all the other columns will be ignored.}
+
+\item{en}{logical set to FALSE by default. If set to TRUE, it adds two columns to the output dataframe containing "Easting" and "Northing" coordinates, wherever available.}
+
+\item{force_coords}{logical set to FALSE by default. If set to TRUE forces the extraction of coordinates for all the IDs (not only those with missing coordinates).}
 }
 \value{
-A named vector containing Easting and Northing coordinates.
+A data.frame containing at least three columns named "UK.AIR.ID", "Latitude", and "Longitude". If en is set to TRUE, there are other two columns containing the "Easting" and "Northing" coordinates.
 }
 \description{
 This function takes as input the UK AIR ID and returns Easting and Northing coordinates (British National Grid, EPSG:27700).
 }
+\details{
+If the input is a data frame with some of the columns named "UK.AIR.ID", "Latitude" and "Longitude", the function only infills missing Latitude/Longitude values. If you want to get the coordinates for all the IDs, set force_coords = TRUE.
+}
 \examples{
  \dontrun{
+ # Case a: alphanumeric string
  ukair_get_coordinates("UKA12536")
+
+ # Case b: vector of strings
  ukair_get_coordinates(c("UKA15910", "UKA15956", "UKA16663", "UKA16097"))
+
+ # Case c: data frame
+ ukair_get_coordinates(ukair_catalogue()[1:10,])
  }
 
 }

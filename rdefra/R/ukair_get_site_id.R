@@ -58,6 +58,8 @@ ukair_get_site_id_internal <- function(uka_id){
 
   }
 
+  if (length(as.list(siteID)) == 0) siteID <- NA
+
   return(siteID)
 
 }

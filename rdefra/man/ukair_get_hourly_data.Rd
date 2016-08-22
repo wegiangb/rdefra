@@ -4,14 +4,12 @@
 \alias{ukair_get_hourly_data}
 \title{Get hourly data for DEFRA stations}
 \usage{
-ukair_get_hourly_data(site_id = NULL, years = NULL, keepUnits = FALSE)
+ukair_get_hourly_data(site_id = NULL, years = NULL)
 }
 \arguments{
 \item{site_id}{This is the ID of a specific site.}
 
 \item{years}{Years for which data should be downloaded.}
-
-\item{keepUnits}{logical that if set to TRUE returns a column with unit after each column with measurements (this parameter is set to FALSE by default).}
 }
 \value{
 A data.frame containing hourly pollution data.
@@ -20,12 +18,18 @@ A data.frame containing hourly pollution data.
 This function fetches hourly data from DEFRA's air pollution monitoring stations.
 }
 \details{
-The measurements are generally in ugm-3 (micrograms per cubic metre). Please double check the units before using these data.
+The measurements are generally in \eqn{\mug/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes, i.e. attr(output, "units"). Please double check the units on the DEFRA website, as they might change over time.
 }
 \examples{
  \dontrun{
- ukair_get_hourly_data("ABD", 2014)
- ukair_get_hourly_data("ABD", 2014:2016)
+ # Get data for 1 year
+ output <- ukair_get_hourly_data("ABD", 2014)
+
+ # Get data for multiple years
+ output <- ukair_get_hourly_data("ABD", 2014:2016)
+
+ # check units
+ attr(output, "units")
  }
 
 }
