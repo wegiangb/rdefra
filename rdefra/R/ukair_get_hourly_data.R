@@ -6,7 +6,7 @@
 #' @param years Years for which data should be downloaded.
 #' @param keep_units logical set to FALSE by default. If set to TRUE the output becomes a list with two elements: data and units.
 #'
-#' @details The measurements are generally in \eqn{\mug/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes (see example below). Please double check the units on the DEFRA website, as they might change over time.
+#' @details The measurements are generally in \eqn{\mu g/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes (see example below). Please double check the units on the DEFRA website, as they might change over time.
 #'
 #' @return A data.frame containing hourly pollution data.
 #'
