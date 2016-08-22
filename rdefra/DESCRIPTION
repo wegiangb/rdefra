@@ -12,8 +12,9 @@ Maintainer: Claudia Vitolo <cvitolodev@gmail.com>
 URL: https://github.com/kehraProject/r_rdefra
 BugReports: https://github.com/kehraProject/r_rdefra/issues
 Description: Get data from DEFRA's UK-AIR website (https://uk-air.defra.gov.uk/). It basically scraps the HTML content.
-Depends: R (>= 2.10), lubridate, tibble, httr, xml2, dplyr
-Suggests: testthat, raster, sp, leaflet, parallel
+Depends: R (>= 2.10)
+Imports: lubridate, tibble, httr, xml2, dplyr, sp
+Suggests: testthat, leaflet, parallel
 LazyData: true
 Encoding: UTF-8
 License: GPL-3
