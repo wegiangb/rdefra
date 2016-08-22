@@ -5,7 +5,7 @@
 #' @param site_id This is the ID of a specific site.
 #' @param years Years for which data should be downloaded.
 #'
-#' @details The measurements are generally in \eqn{\mug/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes, i.e. attr(output, "units"). Please double check the units on the DEFRA website, as they might change over time.
+#' @details The measurements are generally in \eqn{\mu g/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes, i.e. attr(output, "units"). Please double check the units on the DEFRA website, as they might change over time.
 #'
 #' @return A data.frame containing hourly pollution data.
 #'
