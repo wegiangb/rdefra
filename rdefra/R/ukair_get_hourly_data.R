@@ -24,8 +24,7 @@
 #'  }
 #'
 
-ukair_get_hourly_data <- function(site_id = NULL,
-                                  years = NULL){
+ukair_get_hourly_data <- function(site_id = NULL, years = NULL){
 
   if (is.null(site_id)) {
 
