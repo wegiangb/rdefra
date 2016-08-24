@@ -5,7 +5,7 @@
 #' @name rdefra
 #' @docType package
 #'
-#' @importFrom httr GET content
+#' @importFrom httr GET content http_error
 #' @importFrom utils read.csv
 #' @importFrom xml2 xml_find_first xml_attr xml_find_all
 #' @importFrom lubridate dmy_hm ymd

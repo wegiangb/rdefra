@@ -145,6 +145,8 @@ Many thanks again for reviewing my package. Below are my responses to reviewers'
 
 ## rdefra - response to reviewers (step 2)
 
+Thanks a lot for all your very constructive feedbacks and suggestions. I think this package has greatly improved since the first submission. Below are the responses to your latest comments, hope I did not forget anything. Thanks again and please let me know if there is anything else I could add/change.
+
 ### @masalmon
 
 * I have replaced `dplyr::rbind_all` with `dplyr::bind_rows`. Thanks for spotting that, much appreciated! 

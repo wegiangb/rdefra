@@ -43,7 +43,7 @@ The rdefra package depends on two things:
 * Some additional CRAN packages. Check for missing dependencies and install them using the commands below:
 
 ```{r}
-packs <- c('RCurl', 'XML', 'plyr', 'sp', 'devtools')
+packs <- c('httr', 'xml2', 'lubridate', 'tibble', 'dplyr', 'sp', 'devtools')
 new.packages <- packs[!(packs %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 ```
