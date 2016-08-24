@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## rdefra - response to reviewers
+## rdefra - response to reviewers (step 1)
 
 Many thanks again for reviewing my package. Below are my responses to reviewers' comments.
 
@@ -142,3 +142,45 @@ Many thanks again for reviewing my package. Below are my responses to reviewers'
 * I have put the tests in the root folder 
 
 * Test cases are now in a statement format.
+
+## rdefra - response to reviewers (step 2)
+
+### @masalmon
+
+* I have replaced `dplyr::rbind_all` with `dplyr::bind_rows`. Thanks for spotting that, much appreciated! 
+
+* I have added few more messages to `ukair_get_hourly_data()`, hope that will make error messages more informative.
+
+* Well spotted! I added the timezone to lubridate calls.
+
+* I have looked at lubridate errors and tried to sort the umbiguities. Now the only warnings that I get are related to non-existent dates (i.e. 2005.04.31), therefore I thought it is safe to suppress them. 
+
+* I followed your suggestion to format the units in the documentation for `ukair_get_hourly_data` (wrapping the units in the \eqn command) but I cannot manage to remove the space between \mu and g/m^3 without getting a Latex error. I also liked the idea to have units as a separate table using something like `attr(output, "units") <- units`. Unfortunately the new attribute is not preserved when calling the function. Therefore I decided to output a list with two elements: 'data' and 'units'. Would that be ok? Finally, the status information informs the user on whether the  ratification checks and corrections have been made (ratified status).
+
+* The `ukair_get_coordinates` now can be used inputting strings, a vector of strings or a data.frame. In the latter case, it infills missing longitude and latitude for a subset of stations in the catalogue.
+
+#### Readme and vignette
+
+* I have set eval = FALSE for the installation instructions in the README and vignette.
+
+* I fixed the errors/warnings you got while compiling the vignette
+
+#### Documentation
+
+* I have added a new line between information for `pollutant` and `group_id`, and I also added bullet points for each parameter.
+
+#### Tests
+
+* Added some plots to README and vignette 
+
+### @sckott 
+
+* I have moved lubridate, tibble, httr, xml2, dplyr to Imports - Thanks for spotting that!
+
+### @haozhu233
+
+* I have tried using you xPath (page_tab <- xml2::xml_find_first(page_content, "//a[text()='Pre-Formatted Data Files']") but I get and empty node. I'll keep the original XPath but I'll periodically check that works.
+
+* I now use @importFrom only in the rdefra-package.R file. Thanks, well spotted!
+
+* I have changed the names of the variables in the README from stations and stationsNew to stations_raw and stations. I also added few plots.
