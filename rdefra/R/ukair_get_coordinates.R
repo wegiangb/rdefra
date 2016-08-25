@@ -2,11 +2,11 @@
 #'
 #' @description This function takes as input the UK AIR ID and returns Easting and Northing coordinates (British National Grid, EPSG:27700).
 #'
-#' @param UK.AIR.ID contains the station identification code defined by DEFRA. It can be: a) an alphanumeric string, b) a vector of strings or c) a data frame. In the latter case, the column containing the codes should be named "UK.AIR.ID", all the other columns will be ignored.
+#' @param ids contains the station identification code defined by DEFRA. It can be: a) an alphanumeric string, b) a vector of strings or c) a data frame. In the latter case, the column containing the codes should be named "UK.AIR.ID", all the other columns will be ignored.
 #' @param en logical set to FALSE by default. If set to TRUE, it adds two columns to the output dataframe containing "Easting" and "Northing" coordinates, wherever available.
-#' @param force_coords logical set to FALSE by default. If set to TRUE forces the extraction of coordinates for all the IDs (not only those with missing coordinates).
+#' @param all_coords logical set to FALSE by default. If set to TRUE forces the extraction of coordinates for all the IDs (not only those with missing coordinates).
 #'
-#' @details If the input is a data frame with some of the columns named "UK.AIR.ID", "Latitude" and "Longitude", the function only infills missing Latitude/Longitude values. If you want to get the coordinates for all the IDs, set force_coords = TRUE.
+#' @details If the input is a data frame with some of the columns named "UK.AIR.ID", "Latitude" and "Longitude", the function only infills missing Latitude/Longitude values. If you want to get the coordinates for all the IDs, set all_coords = TRUE.
 #'
 #' @return A data.frame containing at least three columns named "UK.AIR.ID", "Latitude", and "Longitude". If en is set to TRUE, there are other two columns containing the "Easting" and "Northing" coordinates.
 #'
@@ -25,63 +25,73 @@
 #'  }
 #'
 
-ukair_get_coordinates <- function(UK.AIR.ID, en = FALSE, force_coords = FALSE){
+ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
 
-  # Check if UK.AIR.ID is a data.frame
-  if ("data.frame" %in% class(UK.AIR.ID)){
+  # Check if ids is a data.frame
+  if ("data.frame" %in% class(ids)){
 
-    nrows <- seq(1,dim(UK.AIR.ID)[1])
+    nrows <- seq(1,dim(ids)[1])
 
     # By default we are expected to just infill missing coordinates
-    if ("Latitude" %in% names(UK.AIR.ID) &
-        "Longitude" %in% names(UK.AIR.ID) & force_coords == FALSE){
-      nrows <- which(is.na(UK.AIR.ID$Latitude) | is.na(UK.AIR.ID$Longitude))
+    if ("Latitude" %in% names(ids) &
+        "Longitude" %in% names(ids) & all_coords == FALSE){
+      nrows <- which(is.na(ids$Latitude) | is.na(ids$Longitude))
     }
 
     # otherwise, we force to extract coordinates for all the given IDs
-    IDs <- UK.AIR.ID$UK.AIR.ID[nrows]
+    IDs <- ids$UK.AIR.ID[nrows]
 
   }else{
 
-    IDs <- UK.AIR.ID
+    IDs <- ids
 
   }
 
-  # If UK.AIR.ID is not a data.frame, it must be a string or vector of strings
+  # If ids is not a data.frame, it must be a string or vector of strings
   IDs <- as.character(IDs)
 
   # Get Easting and Northing
   enDF <- data.frame(t(sapply(IDs, ukair_get_coordinates_internal)))
+  
+  # Remove NAs
+  rowsNoNAs <- which(!is.na(enDF$Easting) & !is.na(enDF$Northing))
+  enDFnoNAs <- enDF[rowsNoNAs,]
 
   # Transform Easting and Northing to Latitude and Longitude
   # first, define spatial points
-  sp::coordinates(enDF) <- ~Easting+Northing
-  sp::proj4string(enDF) <- sp::CRS("+init=epsg:27700")
+  sp::coordinates(enDFnoNAs) <- ~Easting+Northing
+  sp::proj4string(enDFnoNAs) <- sp::CRS("+init=epsg:27700")
   # then, convert coordinates from British National Grid to WGS84
-  latlon <- round(sp::spTransform(enDF, sp::CRS("+init=epsg:4326"))@coords, 6)
+  latlon <- round(sp::spTransform(enDFnoNAs, sp::CRS("+init=epsg:4326"))@coords, 6)
   pt <- data.frame(latlon)
   names(pt) <- c("Longitude", "Latitude")
 
-  dfExtended <- cbind(IDs, enDF@coords, pt)
+  dfExtended <- cbind(IDs[rowsNoNAs], enDFnoNAs@coords, pt)
   names(dfExtended)[1] <- "UK.AIR.ID"
 
-  if ("data.frame" %in% class(UK.AIR.ID)){
+  if ("data.frame" %in% class(ids)){
 
     # if the input was a data.frame
     # return the new data.frame with infilled coordinates
-    UK.AIR.ID[nrows, c("Latitude", "Longitude")] <- dfExtended[, c("Latitude",
-                                                                   "Longitude")]
+    rows2fill <- which(ids$UK.AIR.ID %in% dfExtended$UK.AIR.ID)
+    if(all(ids$UK.AIR.ID[rows2fill] == dfExtended$UK.AIR.ID)){
+      ids$Latitude[rows2fill] <- dfExtended$Latitude
+      ids$Longitude[rows2fill] <- dfExtended$Longitude
+    }else{
+      message("Check the order!")
+    }
 
     # Do we need Easting and Northing?
     # If not, we just keep Latitude and Longitude
     if (en == TRUE) {
-      UK.AIR.ID$Easting <- NA
-      UK.AIR.ID$Northing <- NA
-      UK.AIR.ID[nrows, c("Easting", "Northing")] <- dfExtended[, c("Easting",
-                                                                   "Northing")]
+    
+      suppressWarnings(output <- dplyr::left_join(ids, dfExtended, 
+                                                  by = c("UK.AIR.ID", 
+                                                         "Latitude",
+                                                         "Longitude")))
     }
 
-    return(tibble::as_tibble(UK.AIR.ID))
+    return(tibble::as_tibble(output))
 
   }else{
 
@@ -113,9 +123,6 @@ ukair_get_coordinates_internal <- function(uka_id){
   # Extract tab row containing Easting and Northing
   page_tab <- xml2::xml_find_all(page_content,
                                  "//*[contains(@id,'tab_info')]")[[2]]
-  # @haozhu suggested:
-  # page_tab <- xml2::xml_find_first(page_content,
-  #                                 "//a[text()='Pre-Formatted Data Files']")
 
   # extract and clean all the columns
   vals <- trimws(xml2::xml_text(page_tab))

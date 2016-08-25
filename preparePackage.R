@@ -28,12 +28,16 @@ load("~/Dropbox/Repos/r_rdefra/rdefra/data/stations.rda")
 tools::checkRdaFiles("~/Dropbox/Repos/r_rdefra/rdefra/data/stations.rda")
 
 stations_raw <- ukair_catalogue()
-stations <- ukair_get_coordinates(stations_raw)
-stations$SiteID <- ukair_get_site_id(as.character(stations$UK.AIR.ID))
+
+stations <- ukair_get_coordinates(stations_raw, en = TRUE, force_coords = TRUE)
 length(which(!is.na(stations$Latitude)))
+length(which(!is.na(stations$Longitude)))
+
+stations$SiteID <- ukair_get_site_id(stations$UK.AIR.ID)
+length(which(!is.na(stations$SiteID)))
 
 save(stations,
-     file='~/Dropbox/Repos/r_rdefra/rdefra/data/stations.rda',
+     file='~/r_rdefra/rdefra/data/stations.rda',
      compress='gzip')
 
 # Build README

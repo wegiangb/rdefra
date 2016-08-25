@@ -155,11 +155,11 @@ Thanks a lot for all your very constructive feedbacks and suggestions. I think t
 
 * Well spotted! I added the timezone to lubridate calls.
 
-* I have looked at lubridate errors and tried to sort the umbiguities. Now the only warnings that I get are related to non-existent dates (i.e. 2005.04.31), therefore I thought it is safe to suppress them. 
+* I have looked at lubridate errors and tried to sort the ambiguities. Now the only warnings that I get are related to non-existent dates (i.e. 2005.04.31), therefore I thought it is safe to suppress them. 
 
-* I followed your suggestion to format the units in the documentation for `ukair_get_hourly_data` (wrapping the units in the \eqn command) but I cannot manage to remove the space between \mu and g/m^3 without getting a Latex error. I also liked the idea to have units as a separate table using something like `attr(output, "units") <- units`. Unfortunately the new attribute is not preserved when calling the function. Therefore I decided to output a list with two elements: 'data' and 'units'. Would that be ok? Finally, the status information informs the user on whether the  ratification checks and corrections have been made (ratified status).
+* I followed your suggestion to format the units in the documentation for `ukair_get_hourly_data` (wrapping the units in the \eqn command) but I cannot manage to remove the space between \mu and g/m^3 without getting a Latex error. I also liked the idea to have units as a separate table using something like `attr(output, "units") <- units`. Unfortunately the new attribute is not preserved when calling the function. Therefore I decided to output a list with two elements: 'data' and 'units'. Would that be ok? Finally, the status informs the user on whether the ratification checks and corrections have been made (ratified status).
 
-* The `ukair_get_coordinates` now can be used inputting strings, a vector of strings or a data.frame. In the latter case, it infills missing longitude and latitude for a subset of stations in the catalogue.
+* The `ukair_get_coordinates` now can be used inputting strings, a vector of strings or a data.frame. In the latter case, it infills missing longitude and latitude in the related columns (naming convention: columns should be named "UK.AIR.ID", "Longitude", "Latitude" as in the cached catalogue).
 
 #### Readme and vignette
 
@@ -185,4 +185,4 @@ Thanks a lot for all your very constructive feedbacks and suggestions. I think t
 
 * I now use @importFrom only in the rdefra-package.R file. Thanks, well spotted!
 
-* I have changed the names of the variables in the README from stations and stationsNew to stations_raw and stations. I also added few plots.
+* I have changed the names of the variables in the README from stations and stationsNew to stations_raw and stations. I also added few plots and applications in README/vignette.

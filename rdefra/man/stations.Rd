@@ -20,6 +20,8 @@
   \item{\code{Networks}}{Monitoring Networks}
   \item{\code{AURN.Pollutants.Measured}}{Pollutant measured}
   \item{\code{Site.Description}}{Site.Description}
+  \item{\code{Easting}}{Easting coordinate (British National Grid)}
+  \item{\code{Northing}}{Northing coordinate (British National Grid)}
   \item{\code{SiteID}}{Site ID}
 }}
 \source{
