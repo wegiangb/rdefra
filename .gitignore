@@ -7,6 +7,3 @@ tests/*
 *.tar.gz
 
 *.html
-README_cache
-rdefra/vignettes/rdefra_vignette_cache
-rdefra/vignettes/rdefra_vignette_files

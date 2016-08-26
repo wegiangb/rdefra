@@ -124,13 +124,13 @@ plot(zoo(x = df$Ozone, order.by = as.POSIXct(df$datetime)),
 
 Highest concentrations seem to happen in late spring and at the beginning of summer. In order to check whether this happens every year, we can download multiple years of data and then compare them.
 
-```{r}
+```{r, eval = TRUE}
 # Get 3 years of hourly ozone data from the same monitoring station
 years <- 2013:2015
 df <- ukair_get_hourly_data("MY1", years)
 df$year <- lubridate::year(df$datetime)
 
-par(mfrow=c(3,1)) 
+par(mfrow=c(3,1), mai = c(0.3, 0.6, 0.2, 0.2)) 
 for(yearDF in years){
   df1 <- df[which(df$year == yearDF),]
   plot(zoo(x = df1$Ozone, order.by = as.POSIXct(df1$datetime)), 
@@ -152,17 +152,16 @@ The cached catalogue contains all the available site IDs and coordinates and can
 
 ## Plotting stations' locations 
 
-In the raw catalogue, `r length(which(complete.cases(stations_raw[, c("Latitude", "Longitude")])))` stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to `r length(which(complete.cases(stations[, c("Latitude", "Longitude")])))`. In the figure below, red circles show stations with available hourly data while blue circles show the remaining locations.
+In the raw catalogue, `r length(which(complete.cases(stations_raw[, c("Latitude", "Longitude")])))` stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to `r length(which(complete.cases(stations[, c("Latitude", "Longitude")])))`. In the figure below, blue circles show stations with available hourly data.
 
 ```{r, eval = TRUE}
-validStations <- which(!is.na(stations$SiteID))
+validStations <- stations[which(!is.na(stations$SiteID)),]
 
 library(leaflet)
-leaflet(data = stations) %>% addTiles() %>% 
-  addCircleMarkers(lng = ~Longitude[validStations], 
-                   lat = ~Latitude[validStations], 
-                   radius = 0.5, color="red", popup = ~SiteID[validStations]) %>% 
-  addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = 0.5) 
+leaflet(data = validStations) %>% addTiles() %>% 
+  addCircleMarkers(lng = ~Longitude, 
+                   lat = ~Latitude, 
+                   radius = 0.5, color="blue", popup = ~SiteID)
 ```
 
 ## Analyse the spatial distribution of the monitoring stations
@@ -176,7 +175,7 @@ dotchart(table(stations$Zone))
 
 ```{r, echo=FALSE, eval=TRUE}
 # Environment.Type
-dotchart(table(stations$Environment.Type))
+dotchart(table(stations$Environment.Type[stations$Environment.Type != "Unknown Unknown"]))
 ```
 
 ## Use multiple cores to speed up data retrieval from numerous sites
