@@ -38,9 +38,14 @@ length(which(!is.na(stations$SiteID)))
 
 save(stations,
      file='~/r_rdefra/rdefra/data/stations.rda',
-     compress='gzip')
+     compress='xs')
 
-# Build README
+# Build README (better to use rmarkdown than knitr!)
 rmarkdown::render("README.Rmd", "all")
 
-# Build vignette
+# Build vignette (better to use rmarkdown than knitr!)
+rmarkdown::render("rdefra/vignettes/rdefra_vignette.Rmd", "all")
+
+# Create the Appveyor config file for continuous integration on Windows
+devtools::use_appveyor(pkg = "fuse")
+# move the newly created appveyor.yml to the root directory and modify it
