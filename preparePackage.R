@@ -41,5 +41,8 @@ save(stations,
      compress='gzip')
 
 # Build README
+library(rmarkdown)
+library(knitr)
+rmarkdown::render("README.Rmd","html_document")
 
 # Build vignette

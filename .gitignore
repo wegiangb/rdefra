@@ -7,3 +7,5 @@ tests/*
 *.tar.gz
 
 *.html
+
+README_cache/*
