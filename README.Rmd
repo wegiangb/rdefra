@@ -1,6 +1,7 @@
 ---
 output: 
-  md_document
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r echo=FALSE}
@@ -9,8 +10,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
-  cache = TRUE,
-  eval=FALSE
+  eval = FALSE
 )
 ```
 
