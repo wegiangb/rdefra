@@ -185,16 +185,16 @@ leaflet(data = stations) %>% addTiles() %>%
 
 ## Analyse the spatial distribution of the monitoring stations
 
-Below are two plots showing the spatial distribution of the monitoring stations. These are concentrated largely in urban areas and used to estimate the background level of concentration of pollutants.
+Below are two plots showing the spatial distribution of the monitoring stations. These are concentrated largely in urban areas and mostly estimate the background level of concentration of pollutants.
 
 ```{r, eval=TRUE, fig.height = 10}
 # Zone
-dotchart(as.matrix(table(stations$Zone)))
+dotchart(as.matrix(table(stations$Zone))[,1])
 ```
 
 ```{r, eval=TRUE}
 # Environment.Type
-dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 'Unknown Unknown'])))
+dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 'Unknown Unknown']))[,1])
 ```
 
 ## Use multiple cores to speed up data retrieval from numerous sites
