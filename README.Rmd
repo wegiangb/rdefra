@@ -180,6 +180,7 @@ leaflet(data = stations) %>% addTiles() %>%
                    lat = ~Latitude,  
                    popup = ~SiteID,
                    radius = 1, color='blue', fill = FALSE)
+
 ```
 
 ## Analyse the spatial distribution of the monitoring stations
