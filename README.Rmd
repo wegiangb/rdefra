@@ -34,6 +34,8 @@ The package is designed to collect data efficiently. It allows to download multi
 
 For similar functionalities see also the [openair](https://cran.r-project.org/package=openair) package, which relies on a local copy of the data on servers at King's College (UK), and the [ropenaq](https://CRAN.R-project.org/package=ropenaq) which provides UK-AIR latest measured levels (see https://uk-air.defra.gov.uk/latest/currentlevels) as well as data from other countries.
 
+Please note that this project is released with a [Contributor Code of Conduct](rdefra/CONDUCT.md). By participating in this project you agree to abide by its terms.
+
 # Dependencies & Installation
 
 ## Dependencies
