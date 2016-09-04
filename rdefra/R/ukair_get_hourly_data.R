@@ -20,8 +20,6 @@
 #'  # Get data for multiple years
 #'  output <- ukair_get_hourly_data("ABD", 2014:2016)
 #'
-#'  # check units
-#'  attr(output, "units")
 #'  }
 #'
 

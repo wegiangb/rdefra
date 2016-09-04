@@ -186,3 +186,20 @@ Thanks a lot for all your very constructive feedbacks and suggestions. I think t
 * I now use @importFrom only in the rdefra-package.R file. Thanks, well spotted!
 
 * I have changed the names of the variables in the README from stations and stationsNew to stations_raw and stations. I also added few plots and applications in README/vignette.
+
+## rdefra - response to reviewers (step 3)
+
+### @masalmon
+
+* There's no unit test for `ukair_get_coordinates` because travis-ci fails if I add one. This is strange because the test is successfull if I run it on my local machine.
+
+* The cached version of the catalogue will be updated often but there might always be new stations not yet included. Therefore I cannot generate a warning in case the site ID is not in the cached version of the catalogue...that could generate confusion. 
+
+* I have removed the attr(output, "units") example in the function documentation. What I meant re 'the new attribute is not preserved when calling the function' is that the output of the function `ukair_get_hourly_data` did not store the new attribute called "units", not sure why. 
+
+* Thanks for your suggestion re the README problem, I have added `variant: markdown_github` to the yml header of the Rmd and now it works like a charm!
+The leaflet map is now loaded as screenshot. In the vignette this chuck still produces a dynamic map. I have a github page for my other packages and I was thinking of creating one once the review is finished. It actually does not take much effort as it is automatically generated from the README. 
+
+* I have now added a table of contents at the beginning of the README
+
+* Thanks for the suggestions to improve the first time series plot, now m^3 renders nicely and the plot shows daily means instead of all the points

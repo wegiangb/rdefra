@@ -30,8 +30,6 @@ The measurements are generally in \eqn{\mu g/m^3} (micrograms per cubic metre). 
  # Get data for multiple years
  output <- ukair_get_hourly_data("ABD", 2014:2016)
 
- # check units
- attr(output, "units")
  }
 
 }
