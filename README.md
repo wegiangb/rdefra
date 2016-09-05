@@ -163,6 +163,8 @@ df %>%
 
 ![](README_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
+The above box plots show that the highest concentrations usually occurr during April/May and that these vary year-by-year.  
+
 ## Cached catalogue
 
 For convenience, a cached version of the catalogue (last updated in August 2016) is included in the package and can be loaded using the following command:

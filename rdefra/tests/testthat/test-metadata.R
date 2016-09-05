@@ -94,9 +94,11 @@ test_that("Find easting and northing coordinates of multiple sites.", {
 
   expect_that(all(names(x) == c("UK.AIR.ID", "Easting", "Northing",
                                 "Longitude", "Latitude")), equals(TRUE))
-  expect_that(all(x$Longitude == c(-0.743709, -0.63089, -0.727552, 0.272107)),
+  expect_that(all(x$Longitude == c(-0.743709, -0.63089,
+                                   -0.727552, 0.272107)),
               equals(TRUE))
-  expect_that(all(x$Latitude == c(51.322247, 51.320938, 51.329932, 51.192638)),
+  expect_that(all(x$Latitude == c(51.322247, 51.320938,
+                                  51.329932, 51.192638)),
               equals(TRUE))
 
   closeAllConnections()
@@ -109,8 +111,7 @@ test_that("Infill missing coordinates from data frame.", {
 
   stations <- ukair_catalogue()[1:10,]
   x <- ukair_get_coordinates(stations)
-
-  expect_that(all(is.na(x[,c("Latitude", "Longitude")])), equals(FALSE))
+  expect_that(all(dim(x) == c(3, 5)), equals(TRUE))
 
   closeAllConnections()
 

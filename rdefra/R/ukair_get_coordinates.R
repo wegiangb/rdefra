@@ -52,7 +52,7 @@ ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
 
   # Get Easting and Northing
   enDF <- data.frame(t(sapply(IDs, ukair_get_coordinates_internal)))
-  
+
   # Remove NAs
   rowsNoNAs <- which(!is.na(enDF$Easting) & !is.na(enDF$Northing))
   enDFnoNAs <- enDF[rowsNoNAs,]
@@ -84,11 +84,15 @@ ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
     # Do we need Easting and Northing?
     # If not, we just keep Latitude and Longitude
     if (en == TRUE) {
-    
-      suppressWarnings(output <- dplyr::left_join(ids, dfExtended, 
-                                                  by = c("UK.AIR.ID", 
+
+      suppressWarnings(output <- dplyr::left_join(ids, dfExtended,
+                                                  by = c("UK.AIR.ID",
                                                          "Latitude",
                                                          "Longitude")))
+    }else{
+
+      output <- dfExtended
+
     }
 
     return(tibble::as_tibble(output))

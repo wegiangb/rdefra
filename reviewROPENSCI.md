@@ -191,6 +191,10 @@ Thanks a lot for all your very constructive feedbacks and suggestions. I think t
 
 ### @masalmon
 
+## rdefra - response to reviewers (step 3)
+
+### Thanks @masalmon for giving another look at the package, I greatly appreciate your comments! Below is a summary of the latest changes I made based on your suggestions.  
+
 * There's no unit test for `ukair_get_coordinates` because travis-ci fails if I add one. This is strange because the test is successfull if I run it on my local machine.
 
 * The cached version of the catalogue will be updated often but there might always be new stations not yet included. Therefore I cannot generate a warning in case the site ID is not in the cached version of the catalogue...that could generate confusion. 
@@ -203,3 +207,17 @@ The leaflet map is now loaded as screenshot. In the vignette this chuck still pr
 * I have now added a table of contents at the beginning of the README
 
 * Thanks for the suggestions to improve the first time series plot, now m^3 renders nicely and the plot shows daily means instead of all the points
+
+### One last question from me: I was thinking of moving the package to the root directory (now it's in a subfolder) as I noticed that that is the easiest way to get appveyor to work. The side effect is that the repository name will change and the link to the old releases will be lost. An option would be to create a separate repository. What is your view on that? Thanks again!
+
+## rdefra - response to reviewers (step 4)
+
+### @masalmon
+
+* I added the tests and then used skip_on_travis() before them. I'm not using appveyor at the moment (since I can only get it to work when the package is in the root directory but I'll use skip_on_appveyor() function in the future,if needed. I use skip_on_cran only for the test that retrieve hourly data. The vignette seems to build relatively quickly now.
+
+* Yes, I added the attr(output, "units") just before returning the object.
+
+* Ops, I forgot to knit the README.Rmd before committing. You should now see the toc.
+
+* I have modified the second ozone plot based on your suggestions and added few comments.

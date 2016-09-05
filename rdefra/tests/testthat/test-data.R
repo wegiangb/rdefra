@@ -118,8 +118,9 @@ test_that("Data should be in the right format", {
 
 })
 
-testthat::skip_on_cran()
 test_that("Try and retrieve hourly data", {
+
+  skip_on_cran()
 
   x <- ukair_get_hourly_data(site_id = "ABD", years = "2014")
 
