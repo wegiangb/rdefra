@@ -62,7 +62,7 @@ Load the rdefra package:
 
 
 ```r
-library(rdefra)
+library('rdefra')
 ```
 
 ## Functions
@@ -126,7 +126,7 @@ The time series for a given station can be retrieved in one line of code:
 df <- ukair_get_hourly_data('MY1', years=2015)
 
 # Aggregate to daily means and plot
-library(zoo)
+library('zoo')
 par(mai = c(0.5, 1, 0, 0)) 
 my1 <- zoo(x = df$Ozone, order.by = as.POSIXlt(df$datetime))
 plot(aggregate(my1, as.Date(as.POSIXlt(df$datetime)), mean), 
@@ -140,17 +140,25 @@ Highest concentrations seem to happen in late spring and at the beginning of sum
 
 
 ```r
-# Get 3 years of hourly ozone data from the same monitoring station
-years <- 2013:2015
-df <- ukair_get_hourly_data('MY1', years)
-df$year <- lubridate::year(df$datetime)
+# Get 15 years of hourly ozone data from the same monitoring station
+library('ggplot2')
+library('dplyr')
+library('lubridate')
 
-par(mfrow=c(3,1), mai = c(0.3, 0.6, 0.2, 0.2)) 
-for(yearDF in years){
-  df1 <- df[which(df$year == yearDF),]
-  plot(zoo(x = df1$Ozone, order.by = as.POSIXct(df1$datetime)), 
-     main = '', xlab = '', ylab = yearDF)
-}
+df <- ukair_get_hourly_data('MY1', years = 2000:2015)
+df <- mutate(df, 
+             year = year(datetime),
+             month = month(datetime),
+             year_month = strftime(datetime, "%Y-%m"))
+
+df %>%
+  group_by(month, year_month) %>%
+  summarize(ozone = mean(Ozone, na.rm=TRUE)) %>%
+  ggplot() +
+  geom_boxplot(aes(x = as.factor(month), y = ozone, group = month),
+               outlier.shape = NA) +
+  xlab("") +
+  ylab(expression(paste("Ozone concentration (", mu, "g/",m^3,")")))
 ```
 
 ![](README_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
@@ -196,7 +204,7 @@ In the raw catalogue, 3807 stations contain valid coordinates. After scraping DE
 ```r
 stations_with_Hdata <- which(!is.na(stations$SiteID))
 
-library(leaflet)
+library('leaflet')
 leaflet(data = stations) %>% addTiles() %>% 
   addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
                    lat = ~Latitude[stations_with_Hdata], 
@@ -237,8 +245,7 @@ Using parallel processing, the acquisition of data from hundreds of sites takes 
 
 
 ```r
-library(parallel)
-library(dplyr)
+library('parallel')
 
 # Calculate the number of cores
 no_cores <- detectCores() - 1

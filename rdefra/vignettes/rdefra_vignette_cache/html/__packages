@@ -1,4 +1,7 @@
 base
 rdefra
-leaflet
 zoo
+ggplot2
+dplyr
+lubridate
+leaflet
