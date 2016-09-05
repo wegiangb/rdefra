@@ -51,21 +51,20 @@ test_that("Find site identification number from the UK AIR ID string.", {
 
 })
 
-skip_on_travis()
-test_that("Find easting and northing coordinates of site UKA12536.", {
-
-  uka_id <- "UKA12536"
-
-  x <- ukair_get_coordinates(uka_id)
-
-  expect_that(all(names(x) == c("UK.AIR.ID", "Easting", "Northing",
-                                "Longitude", "Latitude")), equals(TRUE))
-  expect_that(x$Longitude == -0.416786, equals(TRUE))
-  expect_that(x$Latitude == 51.704266, equals(TRUE))
-
-  closeAllConnections()
-
-})
+# test_that("Find easting and northing coordinates of site UKA12536.", {
+#
+#   uka_id <- "UKA12536"
+#
+#   x <- ukair_get_coordinates(uka_id)
+#
+#   expect_that(all(names(x) == c("UK.AIR.ID", "Easting", "Northing",
+#                                 "Longitude", "Latitude")), equals(TRUE))
+#   expect_that(x$Longitude == -0.416786, equals(TRUE))
+#   expect_that(x$Latitude == 51.704266, equals(TRUE))
+#
+#   closeAllConnections()
+#
+# })
 
 # test_that("Find easting and northing coordinates of site UKA15910.", {
 #

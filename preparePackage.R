@@ -1,5 +1,9 @@
 # Generate a template for a README.Rmd
 devtools::use_readme_rmd('rdefra')
+# Build README (better to use rmarkdown than knitr!)
+rmarkdown::render("README.Rmd", "all")
+# Build vignette (better to use rmarkdown than knitr!)
+rmarkdown::render("rdefra/vignettes/rdefra_vignette.Rmd", "all")
 
 # Create the Appveyor config file for continuous integration on Windows
 devtools::use_appveyor(pkg = 'rdefra')
@@ -47,9 +51,3 @@ length(which(!is.na(stations$SiteID)))
 save(stations,
      file='~/r_rdefra/rdefra/data/stations.rda',
      compress='xs')
-
-# Build README (better to use rmarkdown than knitr!)
-rmarkdown::render("README.Rmd", "all")
-
-# Build vignette (better to use rmarkdown than knitr!)
-rmarkdown::render("rdefra/vignettes/rdefra_vignette.Rmd", "all")
