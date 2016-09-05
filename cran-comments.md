@@ -4,7 +4,7 @@ This is a resubmission after adapting the package to make it suitable for inclus
 
 ## Release Summary
 
-This is the second release of rdefra. In this release, we added the following:
+In this new release, we added the following:
 
 * unist tests (using testthat framework), 
 * Travis CI integration
