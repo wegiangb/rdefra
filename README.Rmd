@@ -1,7 +1,4 @@
 ---
-title: "README for the rdefra package"
-author: "Claudia Vitolo"
-date: "`r Sys.Date()`"
 output:
   html_document: 
     keep_md: yes
@@ -12,7 +9,7 @@ output:
 <!-- Edit the README.Rmd only!!! The README.md is generated automatically from README.Rmd. -->
 
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
-=============
+---------------
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(

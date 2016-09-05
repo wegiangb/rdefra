@@ -1,6 +1,14 @@
 # Generate a template for a README.Rmd
 devtools::use_readme_rmd('rdefra')
 
+# Create the Appveyor config file for continuous integration on Windows
+devtools::use_appveyor(pkg = 'rdefra')
+# move the newly created appveyor.yml to the root directory and modify it
+
+# Create the travis config file for continuous integration on Linux-OSX
+devtools::use_travis(pkg = 'rdefra')
+# move the newly created .travis.yml to the root directory and modify it
+
 # Generate a template for a Code of Conduct
 devtools::use_code_of_conduct('rdefra')
 
@@ -45,7 +53,3 @@ rmarkdown::render("README.Rmd", "all")
 
 # Build vignette (better to use rmarkdown than knitr!)
 rmarkdown::render("rdefra/vignettes/rdefra_vignette.Rmd", "all")
-
-# Create the Appveyor config file for continuous integration on Windows
-devtools::use_appveyor(pkg = "fuse")
-# move the newly created appveyor.yml to the root directory and modify it

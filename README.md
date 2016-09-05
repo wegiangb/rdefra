@@ -1,11 +1,8 @@
-# README for the rdefra package
-Claudia Vitolo  
-`r Sys.Date()`  
 
 <!-- Edit the README.Rmd only!!! The README.md is generated automatically from README.Rmd. -->
 
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
-=============
+---------------
 
 
 
