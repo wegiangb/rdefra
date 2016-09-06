@@ -1,4 +1,20 @@
 
+-   [rdefra: Interact with the UK AIR Pollution Database from DEFRA](#rdefra-interact-with-the-uk-air-pollution-database-from-defra)
+    -   [Dependencies & Installation](#dependencies-installation)
+        -   [Dependencies](#dependencies)
+        -   [Installation](#installation)
+    -   [Functions](#functions)
+        -   [Get metadata catalogue](#get-metadata-catalogue)
+        -   [Get missing coordinates](#get-missing-coordinates)
+        -   [Check hourly data availability](#check-hourly-data-availability)
+        -   [Get hourly data](#get-hourly-data)
+    -   [Cached catalogue](#cached-catalogue)
+    -   [Applications](#applications)
+        -   [Plotting stations' locations](#plotting-stations-locations)
+        -   [Analyse the spatial distribution of the monitoring stations](#analyse-the-spatial-distribution-of-the-monitoring-stations)
+        -   [Use multiple cores to speed up data retrieval from numerous sites](#use-multiple-cores-to-speed-up-data-retrieval-from-numerous-sites)
+    -   [Meta](#meta)
+
 <!-- Edit the README.Rmd only!!! The README.md is generated automatically from README.Rmd. -->
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
 ==============================================================
