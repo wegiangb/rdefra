@@ -8,7 +8,7 @@ test_that("Hourly data for station ABD/2014 should be available", {
   rootURL <- "https://uk-air.defra.gov.uk/data_files/site_data/"
   myURL <- paste(rootURL, site_id, "_", years, ".csv", sep = "")
 
-  expect_that(http_error(myURL), equals(FALSE))
+  expect_that(httr::http_error(myURL), equals(FALSE))
 
   closeAllConnections()
 

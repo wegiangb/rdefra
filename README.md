@@ -25,11 +25,9 @@ The package [rdefra](https://cran.r-project.org/package=rdefra) allows to retrie
 
 This package follows a logic similar to other packages such as [waterData](https://cran.r-project.org/package=waterdata) and [rnrfa](https://cran.r-project.org/package=rnrfa): sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `ukair_catalogue()`, missing stations' coordinates can be obtained using the function `ukair_get_coordinates()`, and time series data related to different pollutants can be obtained using the function `ukair_get_hourly_data()`.
 
-The package is designed to collect data efficiently. It allows to download multiple years of data for a single station with one line of code and, if used with the parallel package, allows the acquisition of data from hundreds of sites in only few minutes.
+DEFRA's servers can handle multiple data requests, therefore concurrent calls can be sent simultaneously using the [parallel](https://www.R-project.org/) package. Although the limit rate depends on the maximum number of concurrent calls, traffic and available infrustracture, data retrieval is very efficient. Multiple years of data for hundreds of sites can be downloaded in only few minutes.
 
 For similar functionalities see also the [openair](https://cran.r-project.org/package=openair) package, which relies on a local copy of the data on servers at King's College (UK), and the [ropenaq](https://CRAN.R-project.org/package=ropenaq) which provides UK-AIR latest measured levels (see <https://uk-air.defra.gov.uk/latest/currentlevels>) as well as data from other countries.
-
-Please note that this project is released with a [Contributor Code of Conduct](rdefra/CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 Dependencies & Installation
 ---------------------------
@@ -72,7 +70,7 @@ library('rdefra')
 Functions
 ---------
 
-The package logic assumes that the user access the UK-AIR database in two steps:
+The package logic assumes that users access the UK-AIR database in two steps:
 
 1.  Browse the catalogue of available stations and selects some stations of interest.
 2.  Retrieves data for the selected stations.
@@ -159,7 +157,7 @@ df %>%
   ggplot() +
   geom_boxplot(aes(x = as.factor(month), y = ozone, group = month),
                outlier.shape = NA) +
-  xlab("") +
+  xlab("Month of the year") +
   ylab(expression(paste("Ozone concentration (", mu, "g/",m^3,")")))
 ```
 
@@ -242,19 +240,16 @@ dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 
 
 ### Use multiple cores to speed up data retrieval from numerous sites
 
-Using parallel processing, the acquisition of data from hundreds of sites takes only few minutes:
+The acquisition of data from hundreds of sites takes only few minutes:
 
 ``` r
 library('parallel')
-
-# Calculate the number of cores
-no_cores <- detectCores() - 1
  
-# Initiate cluster
-cl <- makeCluster(no_cores)
+# Use detectCores() to find out many cores are available on your machine
+cl <- makeCluster(getOption("cl.cores", detectCores()))
 
 system.time(myList <- parLapply(cl, stations$SiteID[stations_with_Hdata], 
-ukair_get_hourly_data, years=1999:2016))
+                                ukair_get_hourly_data, years=1999:2016))
 
 stopCluster(cl)
 
@@ -264,6 +259,7 @@ df <- bind_rows(myList)
 Meta
 ----
 
+-   Please note that this project is released with a [Contributor Code of Conduct](rdefra/CONDUCT.md). By participating in this project you agree to abide by its terms.
 -   Please [report any issues or bugs](https://github.com/kehraProject/r_rdefra/issues).
 -   License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
 -   Get citation information for `rdefra` in R doing `citation(package = 'rdefra')`

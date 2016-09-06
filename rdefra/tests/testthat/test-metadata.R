@@ -22,7 +22,7 @@ test_that("DEFRA should be running", {
   # URL: catalogue_fetch[[1]]
 
   # download html
-  expect_that(http_error(catalogue_fetch), equals(FALSE))
+  expect_that(httr::http_error(catalogue_fetch), equals(FALSE))
 
   closeAllConnections()
 
