@@ -1,15 +1,13 @@
 ---
-output:
-  html_document: 
-    keep_md: yes
-    variant: markdown_github
-    toc: true
+output: 
+  github_document: 
+  toc: TRUE
 ---
 
 <!-- Edit the README.Rmd only!!! The README.md is generated automatically from README.Rmd. -->
 
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
----------------
+==============================================================
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
@@ -202,7 +200,7 @@ leaflet(data = stations) %>% addTiles() %>%
 
 ```
 
-![](README_files/leaflet.png)
+![](assets/figures/leaflet.png)
 
 ### Analyse the spatial distribution of the monitoring stations
 
