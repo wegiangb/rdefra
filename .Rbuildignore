@@ -13,3 +13,4 @@ reviewJOSS.md
 reviewROPENSCI.md
 inst/extdata
 inst/paper
+^appveyor\.yml$

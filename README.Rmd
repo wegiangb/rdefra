@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 [![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra)
 [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
 [![Build Status](https://travis-ci.org/kehraProject/rdefra.svg)](https://travis-ci.org/kehraProject/rdefra.svg?branch=master)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kehraProject/rdefra?branch=master&svg=true)](https://ci.appveyor.com/project/kehraProject/rdefra)
 [![codecov.io](https://codecov.io/github/kehraProject/rdefra/coverage.svg?branch=master)](https://codecov.io/github/kehraProject/rdefra?branch=master)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](http://cran.r-project.org/web/packages/rdefra)
 [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
