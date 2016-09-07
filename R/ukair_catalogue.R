@@ -82,15 +82,21 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
                       closed = "true", country_id = 9999, region_id = 9999){
 
   if (!(pollutant %in% 1:10 | pollutant == 9999)) {
-    stop("The parameter 'polluntant' is not set correctly, valid values are integers between 1 and 10 (see documentation) or 9999 (all pollutants).")
+    stop(paste("The parameter 'polluntant' is not set correctly,",
+               "valid values are integers between 1 and 10 (see documentation)",
+               "or 9999 (all pollutants)."))
   }
 
   if (!(group_id %in% 1:30 | group_id == 9999)) {
-    stop("The parameter 'group_id' is not set correctly, valid values are integers between 1 and 30 (see documentation) or 9999 (all groups).")
+    stop(paste("The parameter 'group_id' is not set correctly, valid values",
+               "are integers between 1 and 30 (see documentation) or 9999",
+               "(all groups)."))
   }
 
   if (!(country_id %in% 1:6 | country_id == 9999)) {
-    stop("The parameter 'country_id' is not set correctly, valid values are integers between 1 and 6 (see documentation) or 9999 (all countries).")
+    stop(paste("The parameter 'country_id' is not set correctly, valid values",
+               "are integers between 1 and 6 (see documentation) or 9999 (all",
+               "countries)."))
   }
 
   # Any NULL elements of the list supplied to the query paramater are

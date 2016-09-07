@@ -1,4 +1,4 @@
-This is a resubmission after adapting the package to make it suitable for inclusion in the ropensci framework.
+This is a resubmission after adapting the package to make it suitable for inclusion in the ropensci framework and publication in JOSS.
 
 ---------------------------------
 

@@ -51,7 +51,7 @@ ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
   IDs <- as.character(IDs)
 
   # Get Easting and Northing
-  enDF <- data.frame(t(sapply(IDs, ukair_get_coordinates_internal)))
+  enDF <- data.frame(t(vapply(IDs, ukair_get_coordinates_internal)))
 
   # Remove NAs
   rowsNoNAs <- which(!is.na(enDF$Easting) & !is.na(enDF$Northing))
@@ -62,7 +62,8 @@ ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
   sp::coordinates(enDFnoNAs) <- ~Easting+Northing
   sp::proj4string(enDFnoNAs) <- sp::CRS("+init=epsg:27700")
   # then, convert coordinates from British National Grid to WGS84
-  latlon <- round(sp::spTransform(enDFnoNAs, sp::CRS("+init=epsg:4326"))@coords, 6)
+  latlon <- round(sp::spTransform(enDFnoNAs,
+                                  sp::CRS("+init=epsg:4326"))@coords, 6)
   pt <- data.frame(latlon)
   names(pt) <- c("Longitude", "Latitude")
 
