@@ -13,7 +13,7 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
-  - cd
+  - cd /home/travis/build/kehraProject/rdefra
 
 r_github_packages:
   - jimhester/covr
