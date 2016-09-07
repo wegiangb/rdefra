@@ -114,9 +114,11 @@ ukair_get_hourly_data_internal <- function(site_id, aYear){
     # Build the attribute table to store units
     colUnits <- which(substr(names(df),1,4) == "unit")
     colVars <- colUnits - 2
+    unitsCol <- as.character(t(df[1,colUnits]))
     unitsDF <- data.frame("variable" = names(df)[colVars],
-                          "unit" = as.character(unlist(df[1,colUnits])),
-                          "year" = aYear, stringsAsFactors = FALSE)
+                          "unit" = unitsCol,
+                          "year" = aYear,
+                          stringsAsFactors = FALSE)
 
     # Remove status and units columns
     col2rm <- which(substr(names(df),1,6) == "status" |

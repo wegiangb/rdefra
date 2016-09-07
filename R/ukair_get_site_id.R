@@ -18,7 +18,7 @@ ukair_get_site_id <- function(IDs){
 
   IDs <- as.character(IDs)
 
-  enDF <- t(vapply(IDs, ukair_get_site_id_internal))
+  enDF <- t(sapply(IDs, ukair_get_site_id_internal))
 
   return(as.character(enDF))
 

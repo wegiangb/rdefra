@@ -140,8 +140,21 @@ plot(aggregate(my1, as.Date(as.POSIXlt(df$datetime)), mean),
 Units are available as attribute of the `ukair_get_hourly_data()`.
 
 ``` r
-attributes(my1)$units
-#> NULL
+attributes(df)$units
+#> # A tibble: 45 x 3
+#>                                                 variable              unit
+#>                                                    <chr>             <chr>
+#> 1                                        Carbon.monoxide             mgm-3
+#> 2   PM.sub.10..sub..particulate.matter..Hourly.measured. ugm-3 (TEOM FDMS)
+#> 3                                           Nitric.oxide             ugm-3
+#> 4                                       Nitrogen.dioxide             ugm-3
+#> 5                    Nitrogen.oxides.as.nitrogen.dioxide             ugm-3
+#> 6         Non.volatile.PM.sub.10..sub...Hourly.measured. ugm-3 (TEOM FDMS)
+#> 7        Non.volatile.PM.sub.2.5..sub...Hourly.measured. ugm-3 (TEOM FDMS)
+#> 8                                                  Ozone             ugm-3
+#> 9  PM.sub.2.5..sub..particulate.matter..Hourly.measured. ugm-3 (TEOM FDMS)
+#> 10                                       Sulphur.dioxide             ugm-3
+#> # ... with 35 more rows, and 1 more variables: year <dbl>
 ```
 
 Highest concentrations seem to happen in late spring and at the beginning of summer. In order to check whether this happens every year, we can download multiple years of data and then compare them.

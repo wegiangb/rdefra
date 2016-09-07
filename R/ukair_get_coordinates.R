@@ -51,7 +51,7 @@ ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
   IDs <- as.character(IDs)
 
   # Get Easting and Northing
-  enDF <- data.frame(t(vapply(IDs, ukair_get_coordinates_internal)))
+  enDF <- data.frame(t(sapply(IDs, ukair_get_coordinates_internal)))
 
   # Remove NAs
   rowsNoNAs <- which(!is.na(enDF$Easting) & !is.na(enDF$Northing))
