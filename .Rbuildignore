@@ -1,2 +1,14 @@
 ^README\.Rmd$
 ^CONDUCT\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+
+.travis.yml
+README_files
+assets
+cran-comments.md
+preparePackage.R
+reviewJOSS.md
+reviewROPENSCI.md
+inst/extdata
+inst/paper
