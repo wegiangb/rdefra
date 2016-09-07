@@ -4,7 +4,6 @@
 #'
 #' @param site_id This is the ID of a specific site.
 #' @param years Years for which data should be downloaded.
-#' @param keep_units logical set to FALSE by default. If set to TRUE the output becomes a list with two elements: data and units.
 #'
 #' @details The measurements are generally in \eqn{\mu g/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes (see example below). Please double check the units on the DEFRA website, as they might change over time.
 #'
@@ -20,11 +19,13 @@
 #'  # Get data for multiple years
 #'  output <- ukair_get_hourly_data("ABD", 2014:2016)
 #'
+#'  # Get units
+#'  attributes(output)$units
+#'
 #'  }
 #'
 
-ukair_get_hourly_data <- function(site_id = NULL, years = NULL,
-                                  keep_units = FALSE){
+ukair_get_hourly_data <- function(site_id = NULL, years = NULL){
 
   if (is.null(site_id)) {
 
@@ -41,28 +42,19 @@ ukair_get_hourly_data <- function(site_id = NULL, years = NULL,
   }
 
   data <- vector('list', length = length(years))
-  if (keep_units == TRUE) unitsDATA <- vector('list', length = length(years))
+  unitsDATA <- vector('list', length = length(years))
   id <- 1
 
   for(myYear in as.list(years)){
 
     id <- which(as.list(years) == myYear)
 
-    df_tmp <- ukair_get_hourly_data_internal(site_id, myYear, keep_units)
+    df_tmp <- ukair_get_hourly_data_internal(site_id, myYear)
 
-    if (keep_units == TRUE) {
-
-      # only append to output if data retrieval worked
-      if(!is.null(df_tmp$data)) {
-        data[[id]] <- df_tmp$data
-        unitsDATA[[id]] <- df_tmp$units
-      }
-
-    }else{
-
-      # only append to output if data retrieval worked
-      if(!is.null(df_tmp)) data[[id]] <- df_tmp
-
+    # only append to output if data retrieval worked
+    if(!is.null(df_tmp$data)) {
+      data[[id]] <- df_tmp$data
+      unitsDATA[[id]] <- df_tmp$units
     }
 
   }
@@ -80,17 +72,19 @@ ukair_get_hourly_data <- function(site_id = NULL, years = NULL,
 
   }
 
-  if (keep_units == TRUE) {
-    # remove empties and bind units
-    torm <- unlist(lapply(unitsDATA, is.null))
-    unitsDATA <- unitsDATA[!torm]
-    newMETA <- dplyr::bind_rows(unitsDATA)
+  # remove empties and bind units
+  torm <- unlist(lapply(unitsDATA, is.null))
+  unitsDATA <- unitsDATA[!torm]
 
-    return(list("data" = tibble::as_tibble(newDATA),
-                "units" = tibble::as_tibble(newMETA)))
-  }else{
-    return(tibble::as_tibble(newDATA))
-  }
+  # convert list to dataframe
+  newMETA <- dplyr::bind_rows(unitsDATA)
+
+  newMETA$unit[newMETA$unit == ""] <- NA
+
+  # Add units as new attribute
+  attr(newDATA, "units") <- tibble::as_tibble(newMETA)
+
+  return(tibble::as_tibble(newDATA))
 
 }
 
@@ -103,10 +97,10 @@ ukair_get_hourly_data <- function(site_id = NULL, years = NULL,
 #' @noRd
 #'
 
-ukair_get_hourly_data_internal <- function(site_id, years, keep_units){
+ukair_get_hourly_data_internal <- function(site_id, aYear){
 
   rootURL <- "https://uk-air.defra.gov.uk/data_files/site_data/"
-  myURL <- paste0(rootURL, site_id, "_", years, ".csv")
+  myURL <- paste0(rootURL, site_id, "_", aYear, ".csv")
 
   df <- try(read.csv(myURL, skip = 4)[-c(1),])
 
@@ -120,8 +114,9 @@ ukair_get_hourly_data_internal <- function(site_id, years, keep_units){
     # Build the attribute table to store units
     colUnits <- which(substr(names(df),1,4) == "unit")
     colVars <- colUnits - 2
-    unitsDF <- tibble::tibble("variable" = names(df)[colVars],
-                            "unit" = as.character(unlist(df[1,colUnits])))
+    unitsDF <- data.frame("variable" = names(df)[colVars],
+                          "unit" = as.character(unlist(df[1,colUnits])),
+                          "year" = aYear, stringsAsFactors = FALSE)
 
     # Remove status and units columns
     col2rm <- which(substr(names(df),1,6) == "status" |
@@ -138,14 +133,8 @@ ukair_get_hourly_data_internal <- function(site_id, years, keep_units){
                    "SiteID" = site_id,
                    df[,3:dim(df)[2]])
 
-    # Attributes are not preserved!
-    # attr(newDF, "units") <- unitsDF
-    # Create a list, instead!
-    if (keep_units == TRUE) {
-      output <- list("data" = newDF, "units" = unitsDF)
-    }else{
-      output <- newDF
-    }
+    # Create a list
+    output <- list("data" = newDF, "units" = unitsDF)
 
     return(output)
 

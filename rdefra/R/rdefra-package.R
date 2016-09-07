@@ -5,7 +5,6 @@
 #' @name rdefra
 #' @docType package
 #'
-#' @import rgdal
 #' @importFrom httr GET content http_error
 #' @importFrom utils read.csv
 #' @importFrom xml2 xml_find_first xml_attr xml_find_all

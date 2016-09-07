@@ -4,14 +4,12 @@
 \alias{ukair_get_hourly_data}
 \title{Get hourly data for DEFRA stations}
 \usage{
-ukair_get_hourly_data(site_id = NULL, years = NULL, keep_units = FALSE)
+ukair_get_hourly_data(site_id = NULL, years = NULL)
 }
 \arguments{
 \item{site_id}{This is the ID of a specific site.}
 
 \item{years}{Years for which data should be downloaded.}
-
-\item{keep_units}{logical set to FALSE by default. If set to TRUE the output becomes a list with two elements: data and units.}
 }
 \value{
 A data.frame containing hourly pollution data.
