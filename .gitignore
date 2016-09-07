@@ -9,3 +9,4 @@ tests/*
 *.html
 
 README_cache/*
+vignettes/rdefra_vignette_cache/*

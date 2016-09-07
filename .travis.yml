@@ -3,7 +3,6 @@ cache: packages
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install r-cran-rgdal
-  - cd rdefra
 
 r_github_packages:
   - jimhester/covr

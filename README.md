@@ -58,7 +58,7 @@ install.packages('rdefra')
 Or the development version from github using [devtools](https://github.com/hadley/devtools):
 
 ``` r
-devtools::install_github('cvitolo/r_rdefra', subdir = 'rdefra')
+devtools::install_github('cvitolo/rdefra')
 ```
 
 Load the rdefra package:
