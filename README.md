@@ -19,7 +19,11 @@
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
 ==============================================================
 
-[![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra) [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d) [![Build Status](https://travis-ci.org/kehraProject/rdefra.svg)](https://travis-ci.org/kehraProject/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/kehraProject/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/kehraProject/rdefra?branch=master) [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](http://cran.r-project.org/web/packages/rdefra) [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html) [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
+[![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra) [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
+
+[![Build Status](https://travis-ci.org/kehraProject/rdefra.svg)](https://travis-ci.org/kehraProject/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/kehraProject/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/kehraProject/rdefra?branch=master)
+
+[![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](http://cran.r-project.org/web/packages/rdefra) [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html) [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](http://cran.rstudio.com/web/packages/rdefra/index.html)
 
 The package [rdefra](https://cran.r-project.org/package=rdefra) allows to retrieve air pollution data from the Air Information Resource [UK-AIR](https://uk-air.defra.gov.uk/) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 
