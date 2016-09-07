@@ -2,6 +2,7 @@
 title: 'rdefra: Interact with the UK AIR Pollution Database from DEFRA'
 bibliography: paper.bib
 date: "3 August 2016"
+output: pdf_document
 tags:
 - open data
 - air pollution
