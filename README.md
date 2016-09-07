@@ -49,13 +49,13 @@ if(length(new.packages)) install.packages(new.packages)
 
 ### Installation
 
-You can install this package from CRAN:
+Get the released version from CRAN:
 
 ``` r
 install.packages('rdefra')
 ```
 
-Or you can install the development version from Github with [devtools](https://github.com/hadley/devtools):
+Or the development version from github using [devtools](https://github.com/hadley/devtools):
 
 ``` r
 devtools::install_github('cvitolo/r_rdefra', subdir = 'rdefra')
@@ -137,6 +137,13 @@ plot(aggregate(my1, as.Date(as.POSIXlt(df$datetime)), mean),
 
 ![](README_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
+Units are available as attribute of the `ukair_get_hourly_data()`.
+
+``` r
+attributes(my1)$units
+#> NULL
+```
+
 Highest concentrations seem to happen in late spring and at the beginning of summer. In order to check whether this happens every year, we can download multiple years of data and then compare them.
 
 ``` r
@@ -161,7 +168,7 @@ df %>%
   ylab(expression(paste("Ozone concentration (", mu, "g/",m^3,")")))
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-11-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 The above box plots show that the highest concentrations usually occurr during April/May and that these vary year-by-year.
 
@@ -229,14 +236,14 @@ Below are two plots showing the spatial distribution of the monitoring stations.
 dotchart(as.matrix(table(stations$Zone))[,1])
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-14-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 ``` r
 # Environment.Type
 dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 'Unknown Unknown']))[,1])
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
 ### Use multiple cores to speed up data retrieval from numerous sites
 
