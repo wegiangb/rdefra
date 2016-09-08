@@ -190,7 +190,7 @@ leaflet(data = stations) %>% addTiles() %>%
 
 ```
 
-![](../assets/figures/leaflet.png)
+![](../README_files/leaflet.png)
 
 ### Analyse the spatial distribution of the monitoring stations
 
