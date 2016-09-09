@@ -3,12 +3,10 @@
 #' @description This function takes as input the UK AIR ID and returns Easting and Northing coordinates (British National Grid, EPSG:27700).
 #'
 #' @param ids contains the station identification code defined by DEFRA. It can be: a) an alphanumeric string, b) a vector of strings or c) a data frame. In the latter case, the column containing the codes should be named "UK.AIR.ID", all the other columns will be ignored.
-#' @param en logical set to FALSE by default. If set to TRUE, it adds two columns to the output dataframe containing "Easting" and "Northing" coordinates, wherever available.
-#' @param all_coords logical set to FALSE by default. If set to TRUE forces the extraction of coordinates for all the IDs (not only those with missing coordinates).
 #'
-#' @details If the input is a data frame with some of the columns named "UK.AIR.ID", "Latitude" and "Longitude", the function only infills missing Latitude/Longitude values. If you want to get the coordinates for all the IDs, set all_coords = TRUE.
+#' @details If the input is a data frame with some of the columns named "UK.AIR.ID", "Latitude" and "Longitude", the function only infills missing Latitude/Longitude values.
 #'
-#' @return A data.frame containing at least three columns named "UK.AIR.ID", "Latitude", and "Longitude". If en is set to TRUE, there are other two columns containing the "Easting" and "Northing" coordinates.
+#' @return A data.frame containing at least five columns named "UK.AIR.ID", "Easting", "Northing", "Latitude" and "Longitude".
 #'
 #' @export
 #'
@@ -25,86 +23,54 @@
 #'  }
 #'
 
-ukair_get_coordinates <- function(ids, en = FALSE, all_coords = FALSE){
+ukair_get_coordinates <- function(ids) {
+  UseMethod("ukair_get_coordinates")
+}
 
-  # Check if ids is a data.frame
-  if ("data.frame" %in% class(ids)){
+#' @export
+ukair_get_coordinates.default <- function(ids) {
+  stop("no available method for ", class(ids), call. = FALSE)
+}
 
-    nrows <- seq(1,dim(ids)[1])
+#' @export
+ukair_get_coordinates.character <- function(ids){
 
-    # By default we are expected to just infill missing coordinates
-    if ("Latitude" %in% names(ids) &
-        "Longitude" %in% names(ids) & all_coords == FALSE){
-      nrows <- which(is.na(ids$Latitude) | is.na(ids$Longitude))
-    }
+  dfExtended <- id2coords(ids)
 
-    # otherwise, we force to extract coordinates for all the given IDs
-    IDs <- ids$UK.AIR.ID[nrows]
+  # return a data.frame with coordinates
+  return(tibble::as_tibble(dfExtended))
 
-  }else{
+}
 
-    IDs <- ids
+#' @export
+ukair_get_coordinates.data.frame <- function(ids){
 
+  nrows <- seq(1,dim(ids)[1])
+
+  # By default we are expected to just infill missing coordinates
+  if ("Latitude" %in% names(ids) & "Longitude" %in% names(ids)){
+    nrows <- which(is.na(ids$Latitude) | is.na(ids$Longitude))
   }
 
-  # If ids is not a data.frame, it must be a string or vector of strings
-  IDs <- as.character(IDs)
+  # otherwise, we force to extract coordinates for all the given IDs
+  IDs <- as.character(ids$UK.AIR.ID[nrows])
 
-  # Get Easting and Northing
-  enDF <- data.frame(t(sapply(IDs, ukair_get_coordinates_internal)))
+  dfExtended <- id2coords(IDs)
 
-  # Remove NAs
-  rowsNoNAs <- which(!is.na(enDF$Easting) & !is.na(enDF$Northing))
-  enDFnoNAs <- enDF[rowsNoNAs,]
-
-  # Transform Easting and Northing to Latitude and Longitude
-  # first, define spatial points
-  sp::coordinates(enDFnoNAs) <- ~Easting+Northing
-  sp::proj4string(enDFnoNAs) <- sp::CRS("+init=epsg:27700")
-  # then, convert coordinates from British National Grid to WGS84
-  latlon <- round(sp::spTransform(enDFnoNAs,
-                                  sp::CRS("+init=epsg:4326"))@coords, 6)
-  pt <- data.frame(latlon)
-  names(pt) <- c("Longitude", "Latitude")
-
-  dfExtended <- cbind(IDs[rowsNoNAs], enDFnoNAs@coords, pt)
-  names(dfExtended)[1] <- "UK.AIR.ID"
-
-  if ("data.frame" %in% class(ids)){
-
-    # if the input was a data.frame
-    # return the new data.frame with infilled coordinates
-    rows2fill <- which(ids$UK.AIR.ID %in% dfExtended$UK.AIR.ID)
-    if(all(ids$UK.AIR.ID[rows2fill] == dfExtended$UK.AIR.ID)){
-      ids$Latitude[rows2fill] <- dfExtended$Latitude
-      ids$Longitude[rows2fill] <- dfExtended$Longitude
-    }else{
-      message("Check the order!")
-    }
-
-    # Do we need Easting and Northing?
-    # If not, we just keep Latitude and Longitude
-    if (en == TRUE) {
-
-      suppressWarnings(output <- dplyr::left_join(ids, dfExtended,
-                                                  by = c("UK.AIR.ID",
-                                                         "Latitude",
-                                                         "Longitude")))
-    }else{
-
-      output <- dfExtended
-
-    }
-
-    return(tibble::as_tibble(output))
-
+  # return the new data.frame with infilled coordinates
+  rows2fill <- which(ids$UK.AIR.ID %in% dfExtended$UK.AIR.ID)
+  if(all(ids$UK.AIR.ID[rows2fill] == dfExtended$UK.AIR.ID)){
+    ids$Latitude[rows2fill] <- dfExtended$Latitude
+    ids$Longitude[rows2fill] <- dfExtended$Longitude
   }else{
-
-    # if the input was a string or vector of strings
-    # return the data.frame with coordinates
-    return(tibble::as_tibble(dfExtended))
-
+    message("Check the order!")
   }
+
+  suppressWarnings(output <- dplyr::left_join(ids, dfExtended,
+                                              by = c("UK.AIR.ID",
+                                                     "Latitude", "Longitude")))
+
+  return(tibble::as_tibble(output))
 
 }
 
@@ -150,5 +116,38 @@ ukair_get_coordinates_internal <- function(uka_id){
   }
 
   return(enNumeric)
+
+}
+
+#' Convert Easting and Northing to Latitude and Longitude
+#'
+#' @importFrom sp coordinates proj4string CRS spTransform
+#'
+#' @noRd
+#'
+
+id2coords <-function(IDs){
+
+  # Get Easting and Northing
+  enDF <- data.frame(t(sapply(IDs, ukair_get_coordinates_internal)))
+
+  # Remove NAs
+  rowsNoNAs <- which(!is.na(enDF$Easting) & !is.na(enDF$Northing))
+  enDFnoNAs <- enDF[rowsNoNAs,]
+
+  # Transform Easting and Northing to Latitude and Longitude
+  # first, define spatial points
+  sp::coordinates(enDFnoNAs) <- ~Easting+Northing
+  sp::proj4string(enDFnoNAs) <- sp::CRS("+init=epsg:27700")
+  # then, convert coordinates from British National Grid to WGS84
+  latlon <- round(sp::spTransform(enDFnoNAs,
+                                  sp::CRS("+init=epsg:4326"))@coords, 6)
+  pt <- data.frame(latlon)
+  names(pt) <- c("Longitude", "Latitude")
+
+  dfExtended <- cbind(IDs[rowsNoNAs], enDFnoNAs@coords, pt)
+  names(dfExtended)[1] <- "UK.AIR.ID"
+
+  return(dfExtended)
 
 }

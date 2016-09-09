@@ -1,6 +1,6 @@
 context("Metadata")
 
-test_that("DEFRA should be running", {
+test_that("DEFRA server should be running", {
 
   site_name <- ""
   pollutant <- 9999
@@ -107,7 +107,7 @@ test_that("Infill missing coordinates from data frame.", {
 
   stations <- ukair_catalogue()[1:10,]
   x <- ukair_get_coordinates(stations)
-  expect_that(all(dim(x) == c(3, 5)), equals(TRUE))
+  expect_that(all(dim(x) == c(10, 16)), equals(TRUE))
 
   closeAllConnections()
 
