@@ -7,8 +7,8 @@ Authors@R: c(person("Claudia", "Vitolo", email = "cvitolodev@gmail.com", role = 
              person("Maëlle", "Salmon", role = c("ctb"), comment = "Maëlle Salmon reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/68"),
              person("Hao", "Zhu", role = c("ctb"), comment = "Hao Zhu reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/68"))
 Maintainer: Claudia Vitolo <cvitolodev@gmail.com>
-URL: https://github.com/kehraProject/rdefra
-BugReports: https://github.com/kehraProject/rdefra/issues
+URL: https://github.com/ropenscilabs/rdefra
+BugReports: https://github.com/ropenscilabs/rdefra/issues
 Description: Get data from DEFRA's UK-AIR website (https://uk-air.defra.gov.uk/). It basically scraps the HTML content.
 Depends: R (>= 2.10)
 Imports: lubridate, tibble, httr, xml2, dplyr, sp, rgdal
