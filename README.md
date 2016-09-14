@@ -21,7 +21,7 @@ rdefra: Interact with the UK AIR Pollution Database from DEFRA
 
 [![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra) [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
 
-[![Build Status](https://travis-ci.org/kehraProject/rdefra.svg)](https://travis-ci.org/kehraProject/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/kehraProject/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/kehraProject/rdefra?branch=master)
+[![Build Status](https://travis-ci.org/ropenscilabs/rdefra.svg)](https://travis-ci.org/ropenscilabs/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/ropenscilabs/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/ropenscilabs/rdefra?branch=master)
 
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](https://cran.r-project.org/package=rdefra) [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](https://cran.r-project.org/package=rdefra) [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](https://cran.r-project.org/package=rdefra)
 
@@ -228,18 +228,21 @@ Applications
 In the raw catalogue, 3807 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
 
 ``` r
+# Remove stations with no coordinates
+stations <- stations[-which(is.na(stations$Longitude) | is.na(stations$Latitude)),]
+# Get index for stations for which hourly data is available
 stations_with_Hdata <- which(!is.na(stations$SiteID))
 
 library('leaflet')
 leaflet(data = stations) %>% addTiles() %>% 
-  addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
-                   lat = ~Latitude[stations_with_Hdata], 
-                   radius = 0.5, color='red', 
-                   popup = ~SiteID[stations_with_Hdata]) %>%
   addCircleMarkers(lng = ~Longitude, 
                    lat = ~Latitude,  
                    popup = ~SiteID,
-                   radius = 1, color='blue', fill = FALSE)
+                   radius = 0.1, color='blue', fill = FALSE) %>%
+  addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
+                   lat = ~Latitude[stations_with_Hdata], 
+                   radius = 0.1, color='red', 
+                   popup = ~SiteID[stations_with_Hdata])
 ```
 
 ![](README_files/leaflet.png)
