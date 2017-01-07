@@ -247,6 +247,7 @@ df <- bind_rows(myList)
 * Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 * Please [report any issues or bugs](https://github.com/ropenscilabs/rdefra/issues).
 * License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
+* This package was reviewed by [Maëlle Salmon](https://github.com/masalmon) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
 * Get citation information for `rdefra` in R doing `citation(package = 'rdefra')`
 
 <br/>

@@ -101,7 +101,7 @@ The same function, can be used to filter the catalogue using the following input
 stations_EnglandOzone <- ukair_catalogue(pollutant = 1, country_id = 1)
 ```
 
-The example above shows how to retrieve the 104 stations in England in which ozone is measured.
+The example above shows how to retrieve the 105 stations in England in which ozone is measured.
 
 ### Get missing coordinates
 
@@ -198,7 +198,7 @@ For convenience, a cached version of the catalogue (last updated in August 2016)
 data('stations')
 
 stations
-#> # A tibble: 6,569 x 17
+#> # A tibble: 6,569 × 17
 #>    UK.AIR.ID EU.Site.ID EMEP.Site.ID
 #>        <chr>      <chr>        <chr>
 #> 1   UKA15910       <NA>         <NA>
@@ -212,8 +212,8 @@ stations
 #> 9   UKA13341       <NA>         <NA>
 #> 10  UKA15369       <NA>         <NA>
 #> # ... with 6,559 more rows, and 14 more variables: Site.Name <chr>,
-#> #   Environment.Type <chr>, Zone <chr>, Start.Date <time>,
-#> #   End.Date <time>, Latitude <dbl>, Longitude <dbl>, Altitude..m. <dbl>,
+#> #   Environment.Type <chr>, Zone <chr>, Start.Date <dttm>,
+#> #   End.Date <dttm>, Latitude <dbl>, Longitude <dbl>, Altitude..m. <dbl>,
 #> #   Networks <chr>, AURN.Pollutants.Measured <chr>,
 #> #   Site.Description <chr>, Easting <dbl>, Northing <dbl>, SiteID <chr>
 ```
@@ -225,7 +225,7 @@ Applications
 
 ### Plotting stations' locations
 
-In the raw catalogue, 3807 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
+In the raw catalogue, 3809 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
 
 ``` r
 # Remove stations with no coordinates
@@ -289,6 +289,7 @@ Meta
 -   Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 -   Please [report any issues or bugs](https://github.com/ropenscilabs/rdefra/issues).
 -   License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
+-   This package was reviewed by [Maëlle Salmon](https://github.com/masalmon) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
 -   Get citation information for `rdefra` in R doing `citation(package = 'rdefra')`
 
 <br/>
