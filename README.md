@@ -21,7 +21,7 @@ rdefra: Interact with the UK AIR Pollution Database from DEFRA
 
 [![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra) [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
 
-[![Build Status](https://travis-ci.org/ropenscilabs/rdefra.svg)](https://travis-ci.org/ropenscilabs/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/ropenscilabs/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/ropenscilabs/rdefra?branch=master)
+[![Build Status](https://travis-ci.org/ropensci/rdefra.svg)](https://travis-ci.org/ropensci/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/ropensci/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/rdefra?branch=master)
 
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](https://cran.r-project.org/package=rdefra) [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](https://cran.r-project.org/package=rdefra) [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](https://cran.r-project.org/package=rdefra)
 
@@ -62,7 +62,7 @@ install.packages('rdefra')
 Or the development version from github using [devtools](https://github.com/hadley/devtools):
 
 ``` r
-devtools::install_github('ropenscilabs/rdefra')
+devtools::install_github('ropensci/rdefra')
 ```
 
 Load the rdefra package:
@@ -101,7 +101,7 @@ The same function, can be used to filter the catalogue using the following input
 stations_EnglandOzone <- ukair_catalogue(pollutant = 1, country_id = 1)
 ```
 
-The example above shows how to retrieve the 105 stations in England in which ozone is measured.
+The example above shows how to retrieve the 106 stations in England in which ozone is measured.
 
 ### Get missing coordinates
 
@@ -145,7 +145,7 @@ Units are available as attribute of the `ukair_get_hourly_data()`.
 
 ``` r
 attributes(df)$units
-#> # A tibble: 45 x 3
+#> # A tibble: 45 × 3
 #>                                                 variable              unit
 #>                                                    <chr>             <chr>
 #> 1                                        Carbon.monoxide             mgm-3
@@ -225,7 +225,7 @@ Applications
 
 ### Plotting stations' locations
 
-In the raw catalogue, 3809 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
+In the raw catalogue, 3812 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
 
 ``` r
 # Remove stations with no coordinates
@@ -287,7 +287,7 @@ Meta
 ----
 
 -   Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
--   Please [report any issues or bugs](https://github.com/ropenscilabs/rdefra/issues).
+-   Please [report any issues or bugs](https://github.com/ropensci/rdefra/issues).
 -   License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
 -   This package was reviewed by [Maëlle Salmon](https://github.com/masalmon) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
 -   Get citation information for `rdefra` in R doing `citation(package = 'rdefra')`
