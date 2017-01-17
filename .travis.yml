@@ -20,7 +20,7 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
-  - cd /home/travis/build/ropenscilabs/rdefra
+  - cd /home/travis/build/ropensci/rdefra
 
 r_github_packages:
   - jimhester/covr
