@@ -6,7 +6,7 @@ citEntry(entry = "manual",
   year = "2016",
   note = "R package version 0.2.0",
   url = "https://CRAN.R-project.org/package=rdefra",
-  doi = "http://dx.doi.org/10.5281/zenodo.59851",
+  doi = "10.5281/zenodo.61711",
   textVersion = "Claudia Vitolo, Andrew Russell and Allan Tucker (2016). rdefra: Interact with the UK AIR Pollution Database from DEFRA. R package version 0.2.0
-  https://CRAN.R-project.org/package=rdefra, DOI: http://dx.doi.org/10.5281/zenodo.59851"
+  https://CRAN.R-project.org/package=rdefra, DOI: https://doi.org/10.5281/zenodo.61711"
 )

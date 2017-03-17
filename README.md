@@ -19,7 +19,7 @@
 rdefra: Interact with the UK AIR Pollution Database from DEFRA
 ==============================================================
 
-[![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra) [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.61711.svg)](https://doi.org/10.5281/zenodo.61711) [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
 
 [![Build Status](https://travis-ci.org/ropensci/rdefra.svg)](https://travis-ci.org/ropensci/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/ropensci/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/rdefra?branch=master)
 
@@ -27,7 +27,7 @@ rdefra: Interact with the UK AIR Pollution Database from DEFRA
 
 The package [rdefra](https://cran.r-project.org/package=rdefra) allows to retrieve air pollution data from the Air Information Resource [UK-AIR](https://uk-air.defra.gov.uk/) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 
-This package follows a logic similar to other packages such as [waterData](https://cran.r-project.org/package=waterdata) and [rnrfa](https://cran.r-project.org/package=rnrfa): sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `ukair_catalogue()`, missing stations' coordinates can be obtained using the function `ukair_get_coordinates()`, and time series data related to different pollutants can be obtained using the function `ukair_get_hourly_data()`.
+This package follows a logic similar to other packages such as [waterData](https://cran.r-project.org/package=waterData) and [rnrfa](https://cran.r-project.org/package=rnrfa): sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `ukair_catalogue()`, missing stations' coordinates can be obtained using the function `ukair_get_coordinates()`, and time series data related to different pollutants can be obtained using the function `ukair_get_hourly_data()`.
 
 DEFRA's servers can handle multiple data requests, therefore concurrent calls can be sent simultaneously using the [parallel](https://www.R-project.org/) package. Although the limit rate depends on the maximum number of concurrent calls, traffic and available infrustracture, data retrieval is very efficient. Multiple years of data for hundreds of sites can be downloaded in only few minutes.
 
@@ -40,7 +40,7 @@ Dependencies & Installation
 
 The rdefra package depends on two things:
 
--   The Geospatial Data Abstraction Library (gdal). If you use linux/ubuntu, this can be installed with the following command: `sudo apt-get install -y r-cran-rgdal`.
+-   The Geospatial Data Abstraction Library (gdal).
 
 -   Some additional CRAN packages. Check for missing dependencies and install them using the commands below:
 
@@ -139,26 +139,13 @@ plot(aggregate(my1, as.Date(as.POSIXlt(df$datetime)), mean),
                                                     mu, 'g/', m^3, ']')))
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](README_files/figure-markdown_github/hourlydata-1.png)
 
 Units are available as attribute of the `ukair_get_hourly_data()`.
 
 ``` r
-attributes(df)$units
-#> # A tibble: 45 × 3
-#>                                                 variable              unit
-#>                                                    <chr>             <chr>
-#> 1                                        Carbon.monoxide             mgm-3
-#> 2   PM.sub.10..sub..particulate.matter..Hourly.measured. ugm-3 (TEOM FDMS)
-#> 3                                           Nitric.oxide             ugm-3
-#> 4                                       Nitrogen.dioxide             ugm-3
-#> 5                    Nitrogen.oxides.as.nitrogen.dioxide             ugm-3
-#> 6         Non.volatile.PM.sub.10..sub...Hourly.measured. ugm-3 (TEOM FDMS)
-#> 7        Non.volatile.PM.sub.2.5..sub...Hourly.measured. ugm-3 (TEOM FDMS)
-#> 8                                                  Ozone             ugm-3
-#> 9  PM.sub.2.5..sub..particulate.matter..Hourly.measured. ugm-3 (TEOM FDMS)
-#> 10                                       Sulphur.dioxide             ugm-3
-#> # ... with 35 more rows, and 1 more variables: year <dbl>
+attributes(my1)$units
+#> NULL
 ```
 
 Highest concentrations seem to happen in late spring and at the beginning of summer. In order to check whether this happens every year, we can download multiple years of data and then compare them.
@@ -185,7 +172,7 @@ df %>%
   ylab(expression(paste("Ozone concentration (", mu, "g/",m^3,")")))
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](README_files/figure-markdown_github/ozone-1.png)
 
 The above box plots show that the highest concentrations usually occurr during April/May and that these vary year-by-year.
 
@@ -225,27 +212,22 @@ Applications
 
 ### Plotting stations' locations
 
-In the raw catalogue, 3812 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
+In the raw catalogue, 3813 stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to 6567. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
 
 ``` r
-# Remove stations with no coordinates
-stations <- stations[-which(is.na(stations$Longitude) | is.na(stations$Latitude)),]
-# Get index for stations for which hourly data is available
 stations_with_Hdata <- which(!is.na(stations$SiteID))
 
 library('leaflet')
 leaflet(data = stations) %>% addTiles() %>% 
+  addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
+                   lat = ~Latitude[stations_with_Hdata], 
+                   radius = 0.5, color='red', 
+                   popup = ~SiteID[stations_with_Hdata]) %>%
   addCircleMarkers(lng = ~Longitude, 
                    lat = ~Latitude,  
                    popup = ~SiteID,
-                   radius = 0.1, color='blue', fill = FALSE) %>%
-  addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
-                   lat = ~Latitude[stations_with_Hdata], 
-                   radius = 0.1, color='red', 
-                   popup = ~SiteID[stations_with_Hdata])
+                   radius = 1, color='blue', fill = FALSE)
 ```
-
-![](README_files/leaflet.png)
 
 ### Analyse the spatial distribution of the monitoring stations
 
@@ -256,14 +238,14 @@ Below are two plots showing the spatial distribution of the monitoring stations.
 dotchart(as.matrix(table(stations$Zone))[,1])
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](README_files/figure-markdown_github/dotchart1-1.png)
 
 ``` r
 # Environment.Type
 dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 'Unknown Unknown']))[,1])
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-16-1.png)
+![](README_files/figure-markdown_github/dotchart2-1.png)
 
 ### Use multiple cores to speed up data retrieval from numerous sites
 
@@ -289,7 +271,7 @@ Meta
 -   Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 -   Please [report any issues or bugs](https://github.com/ropensci/rdefra/issues).
 -   License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
--   This package was reviewed by [Maëlle Salmon](https://github.com/masalmon) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
+-   This package was reviewed by [Maëlle Salmon](https://github.com/maelle) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
 -   Get citation information for `rdefra` in R doing `citation(package = 'rdefra')`
 
 <br/>

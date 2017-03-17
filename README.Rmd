@@ -15,12 +15,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
-  eval = FALSE,
-  cache = TRUE
+  eval = FALSE
 )
 ```
 
-[![DOI](https://zenodo.org/badge/9118/kehraProject/rdefra.svg)](https://zenodo.org/badge/latestdoi/9118/kehraProject/rdefra)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.61711.svg)](https://doi.org/10.5281/zenodo.61711)
 [![status](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d/status.svg)](http://joss.theoj.org/papers/57058f6e8a511f3bb0667ef7687cc87d)
 
 [![Build Status](https://travis-ci.org/ropensci/rdefra.svg)](https://travis-ci.org/ropensci/rdefra.svg?branch=master)
@@ -32,7 +31,7 @@ knitr::opts_chunk$set(
 
 The package [rdefra](https://cran.r-project.org/package=rdefra) allows to retrieve air pollution data from the Air Information Resource [UK-AIR](https://uk-air.defra.gov.uk/) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 
-This package follows a logic similar to other packages such as [waterData](https://cran.r-project.org/package=waterdata) and [rnrfa](https://cran.r-project.org/package=rnrfa): sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `ukair_catalogue()`, missing stations' coordinates can be obtained using the function `ukair_get_coordinates()`, and time series data related to different pollutants can be obtained using the function `ukair_get_hourly_data()`.
+This package follows a logic similar to other packages such as [waterData](https://cran.r-project.org/package=waterData) and [rnrfa](https://cran.r-project.org/package=rnrfa): sites are first identified through a catalogue, data are imported via the station identification number, then data are visualised and/or used in analyses. The metadata related to the monitoring stations are accessible through the function `ukair_catalogue()`, missing stations' coordinates can be obtained using the function `ukair_get_coordinates()`, and time series data related to different pollutants can be obtained using the function `ukair_get_hourly_data()`.
 
 DEFRA's servers can handle multiple data requests, therefore concurrent calls can be sent simultaneously using the [parallel](https://www.R-project.org/) package. Although the limit rate depends on the maximum number of concurrent calls, traffic and available infrustracture, data retrieval is very efficient. Multiple years of data for hundreds of sites can be downloaded in only few minutes.
 
@@ -44,7 +43,7 @@ For similar functionalities see also the [openair](https://cran.r-project.org/pa
 
 The rdefra package depends on two things: 
 
-* The Geospatial Data Abstraction Library (gdal). If you use linux/ubuntu, this can be installed with the following command: `sudo apt-get install -y r-cran-rgdal`. 
+* The Geospatial Data Abstraction Library (gdal). 
 
 * Some additional CRAN packages. Check for missing dependencies and install them using the commands below:
 
@@ -126,7 +125,7 @@ stations$SiteID <- ukair_get_site_id(stations$UK.AIR.ID)
 
 The time series for a given station can be retrieved in one line of code:
 
-```{r, eval = TRUE}
+```{r hourlydata, eval = TRUE, fig.width=7}
 # Get 1 year of hourly ozone data from London Marylebone Road monitoring station
 df <- ukair_get_hourly_data('MY1', years=2015)
 
@@ -142,12 +141,12 @@ plot(aggregate(my1, as.Date(as.POSIXlt(df$datetime)), mean),
 Units are available as attribute of the `ukair_get_hourly_data()`.
 
 ```{r, eval = TRUE}
-attributes(df)$units
+attributes(my1)$units
 ```
 
 Highest concentrations seem to happen in late spring and at the beginning of summer. In order to check whether this happens every year, we can download multiple years of data and then compare them.
 
-```{r, eval = TRUE}
+```{r ozone, eval = TRUE, fig.width=7}
 # Get 15 years of hourly ozone data from the same monitoring station
 library('ggplot2')
 library('dplyr')
@@ -189,37 +188,32 @@ The cached catalogue contains all the available site IDs and coordinates and can
 
 In the raw catalogue, `r length(which(complete.cases(stations_raw[, c('Latitude', 'Longitude')])))` stations contain valid coordinates. After scraping DEFRA's web pages, the number of stations with valid coordinates rises to `r length(which(complete.cases(stations[, c('Latitude', 'Longitude')])))`. In the figure below, blue circles show all the stations with valid coordinates, while red circles show stations with available hourly data.
 
-```{r}
-# Remove stations with no coordinates
-stations <- stations[-which(is.na(stations$Longitude) | is.na(stations$Latitude)),]
-# Get index for stations for which hourly data is available
+```{r map}
 stations_with_Hdata <- which(!is.na(stations$SiteID))
 
 library('leaflet')
 leaflet(data = stations) %>% addTiles() %>% 
+  addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
+                   lat = ~Latitude[stations_with_Hdata], 
+                   radius = 0.5, color='red', 
+                   popup = ~SiteID[stations_with_Hdata]) %>%
   addCircleMarkers(lng = ~Longitude, 
                    lat = ~Latitude,  
                    popup = ~SiteID,
-                   radius = 0.1, color='blue', fill = FALSE) %>%
-  addCircleMarkers(lng = ~Longitude[stations_with_Hdata], 
-                   lat = ~Latitude[stations_with_Hdata], 
-                   radius = 0.1, color='red', 
-                   popup = ~SiteID[stations_with_Hdata])
+                   radius = 1, color='blue', fill = FALSE)
 
 ```
-
-![](README_files/leaflet.png)
 
 ### Analyse the spatial distribution of the monitoring stations
 
 Below are two plots showing the spatial distribution of the monitoring stations. These are concentrated largely in urban areas and mostly estimate the background level of concentration of pollutants.
 
-```{r, eval=TRUE, fig.height = 10}
+```{r dotchart1, eval=TRUE, fig.height = 10, fig.width=7}
 # Zone
 dotchart(as.matrix(table(stations$Zone))[,1])
 ```
 
-```{r, eval=TRUE}
+```{r dotchart2, eval=TRUE, fig.width=7}
 # Environment.Type
 dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 'Unknown Unknown']))[,1])
 ```
@@ -247,7 +241,7 @@ df <- bind_rows(myList)
 * Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 * Please [report any issues or bugs](https://github.com/ropensci/rdefra/issues).
 * License: [GPL-3](https://opensource.org/licenses/GPL-3.0)
-* This package was reviewed by [Maëlle Salmon](https://github.com/masalmon) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
+* This package was reviewed by [Maëlle Salmon](https://github.com/maelle) and [Hao Zhu](https://github.com/haozhu233) for submission to ROpenSci (see review [here](https://github.com/ropensci/onboarding/issues/68)) and the Journal of Open Source Software (see review [here](https://github.com/openjournals/joss-reviews/issues/51)).
 * Get citation information for `rdefra` in R doing `citation(package = 'rdefra')`
 
 <br/>

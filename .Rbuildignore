@@ -3,6 +3,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
+figure$
+cache$
 .travis.yml
 README_files
 README_cache
