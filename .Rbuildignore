@@ -3,7 +3,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
-figure$
 cache$
 .travis.yml
 assets

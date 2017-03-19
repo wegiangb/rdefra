@@ -1,6 +1,6 @@
 ---
 author: "Claudia Vitolo"
-date: "2017-03-17"
+date: "2017-03-19"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::knitr}
@@ -120,22 +120,19 @@ df <- ukair_get_hourly_data('MY1', years=2015)
 
 # Aggregate to daily means and plot
 library('zoo')
-par(mai = c(0.5, 1, 0, 0)) 
 my1 <- zoo(x = df$Ozone, order.by = as.POSIXlt(df$datetime))
+```
+
+
+```r
+par(mai = c(0.5, 1, 0, 0)) 
+
 plot(aggregate(my1, as.Date(as.POSIXlt(df$datetime)), mean), 
      main = '', xlab = '', ylab = expression(paste('Ozone concentration [',
                                                     mu, 'g/', m^3, ']')))
 ```
 
-![plot of chunk hourlydata](figure/hourlydata-1.png)
-
-Units are available as attribute of the `ukair_get_hourly_data()`.
-
-
-```r
-attributes(my1)$units
-#> NULL
-```
+![Hourly ozone data from London Marylebone Road monitoring station](hourlydata-1.png)
 
 Highest concentrations seem to happen in late spring and at the beginning of summer. In order to check whether this happens every year, we can download multiple years of data and then compare them.
 
@@ -162,7 +159,7 @@ df %>%
   ylab(expression(paste("Ozone concentration (", mu, "g/",m^3,")")))
 ```
 
-![plot of chunk ozone](figure/ozone-1.png)
+![15 years of hourly ozone data from London Marylebone Road monitoring station](ozone-1.png)
 
 The above box plots show that the highest concentrations usually occurr during April/May and that these vary year-by-year.  
 
@@ -217,9 +214,10 @@ leaflet(data = stations) %>% addTiles() %>%
                    lat = ~Latitude,  
                    popup = ~SiteID,
                    radius = 1, color='blue', fill = FALSE)
+
 ```
 
-![plot of chunk map](figure/map-1.png)
+![Blue circles show stations with valid coordinates, while red circles show stations with available hourly data](map-1.png)
 
 ### Analyse the spatial distribution of the monitoring stations
 
@@ -231,7 +229,8 @@ Below are two plots showing the spatial distribution of the monitoring stations.
 dotchart(as.matrix(table(stations$Zone))[,1])
 ```
 
-![plot of chunk dotchart1](figure/dotchart1-1.png)
+![Dotchart1](dotchart1-1.png)
+
 
 
 ```r
@@ -239,7 +238,7 @@ dotchart(as.matrix(table(stations$Zone))[,1])
 dotchart(as.matrix(table(stations$Environment.Type[stations$Environment.Type != 'Unknown Unknown']))[,1])
 ```
 
-![plot of chunk dotchart2](figure/dotchart2-1.png)
+![Dotchart2](dotchart2-1.png)
 
 ### Use multiple cores to speed up data retrieval from numerous sites
 
