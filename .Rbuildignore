@@ -6,8 +6,6 @@
 figure$
 cache$
 .travis.yml
-README_files
-README_cache
 assets
 cran-comments.md
 preparePackage.R
