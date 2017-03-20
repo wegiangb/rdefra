@@ -72,7 +72,7 @@ The package logic assumes that users access the UK-AIR database in two steps:
 ### Get metadata catalogue
 DEFRA monitoring stations can be downloaded and filtered using the function `ukair_catalogue()` with no input parameters, as in the example below. 
 
-```{r, eval= TRUE}
+```{r, eval = TRUE}
 # Get full catalogue
 stations_raw <- ukair_catalogue()
 ```
