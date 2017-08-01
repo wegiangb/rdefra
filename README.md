@@ -8,6 +8,7 @@ rdefra: Interact with the UK AIR Pollution Database from DEFRA
 [![Build Status](https://travis-ci.org/ropensci/rdefra.svg)](https://travis-ci.org/ropensci/rdefra.svg?branch=master) [![codecov.io](https://codecov.io/gh/ropensci/rdefra/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/rdefra?branch=master)
 
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rdefra)](https://cran.r-project.org/package=rdefra) [![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/rdefra)](https://cran.r-project.org/package=rdefra) [![CRAN Monthly Downloads](http://cranlogs.r-pkg.org/badges/rdefra)](https://cran.r-project.org/package=rdefra)
+[![](https://badges.ropensci.org/68_status.svg)](https://github.com/ropensci/onboarding/issues/68)
 
 The package [rdefra](https://cran.r-project.org/package=rdefra) allows to retrieve air pollution data from the Air Information Resource [UK-AIR](https://uk-air.defra.gov.uk/) of the Department for Environment, Food and Rural Affairs in the United Kingdom. UK-AIR does not provide a public API for programmatic access to data, therefore this package scrapes the HTML pages to get relevant information.
 
