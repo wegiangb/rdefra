@@ -1,19 +1,21 @@
-This is a resubmission after adapting the package to make it suitable for inclusion in the ropensci framework and publication in JOSS.
+This is a resubmission due to a recent modification of the catalogue API.
 
 ---------------------------------
 
 ## Release Summary
 
-In this new release, we added the following:
+### MINOR FIXES
+Functions are updated due to a recent modification of the catalogue API.
 
-* unist tests (using testthat framework), 
-* Travis CI integration
-* a vignette
-* paper for submission to JOSS
-* documented the submission to the ropensci project
+### MINOR IMPROVEMENTS
+Changes made after scanning the package using goodpractice:
+* lines no longer than 80 characters
+* 84% code coverage
+* function names shorter than 30 characters
+  - function ukair_get_coordinates now renamed ukair_get_coords
 
 ## Test environment
-* Ubuntu 14.04, R 3.3.1
+* Ubuntu 18.04, R 3.3.1
 
 ## R CMD check results
 

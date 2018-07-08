@@ -2,9 +2,10 @@
 ^CONDUCT\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^appveyor\.yml$
+^\.travis\.yml$
 
 cache$
-.travis.yml
 assets
 cran-comments.md
 preparePackage.R
@@ -12,5 +13,4 @@ reviewJOSS.md
 reviewROPENSCI.md
 inst/extdata
 inst/paper
-^appveyor\.yml$
 docs/
