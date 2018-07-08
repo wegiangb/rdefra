@@ -105,9 +105,24 @@ test_that("Find easting and northing coordinates of multiple sites.", {
 
 test_that("Infill missing coordinates from data frame.", {
 
-  stations <- ukair_catalogue()[1:10,]
+  stations <- structure(list(UK.AIR.ID = c("UKA15910", "UKA15956", "UKA16663",
+                                           "UKA16097", "UKA12536", "UKA12949",
+                                           "UKA12399", "UKA13340", "UKA13341",
+                                           "UKA15369"),
+                             Latitude = c(51.322247, 51.320938, 51.329932,
+                                          51.192638, NA, NA, NA, 51.712306,
+                                          51.712431, 51.711461),
+                             Longitude = c(-0.743709, -0.63089, -0.727552,
+                                           0.272107, NA, NA, NA, -3.447338,
+                                           -3.43721, -3.442969)),
+                        .Names = c("UK.AIR.ID", "Latitude", "Longitude"),
+                        row.names = c(NA, -10L),
+                        class = c("tbl_df", "tbl", "data.frame"))
   x <- ukair_get_coordinates(stations)
-  expect_that(all(dim(x) == c(10, 16)), equals(TRUE))
+  expect_equal(round(x$Latitude[which(is.na(stations$Latitude))], 3),
+               c(51.704, 51.695, 51.648))
+  expect_equal(round(x$Longitude[which(is.na(stations$Longitude))], 3),
+               c(-0.417, -3.225, -3.135))
 
   closeAllConnections()
 
