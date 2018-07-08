@@ -8,23 +8,31 @@ ukair_catalogue(site_name = "", pollutant = 9999, group_id = 9999,
   closed = "true", country_id = 9999, region_id = 9999)
 }
 \arguments{
-\item{site_name}{This is the name of a specific site. By default this is left blank to get info on all the available sites.}
+\item{site_name}{This is the name of a specific site. By default this is left
+blank to get info on all the available sites.}
 
-\item{pollutant}{This is a number from 1 to 10. Default is 9999, which means all the pollutants.}
+\item{pollutant}{This is a number from 1 to 10. Default is 9999, which means
+all the pollutants.}
 
-\item{group_id}{This is the identification number of a group of stations. Default is 9999 which means all available networks.}
+\item{group_id}{This is the identification number of a group of stations.
+Default is 9999 which means all available networks.}
 
 \item{closed}{This is "true" to include closed stations, "false" otherwise.}
 
-\item{country_id}{This is the identification number of the country, it can be a number from 1 to 6. Default is 9999, which means all the countries.}
+\item{country_id}{This is the identification number of the country, it can be
+a number from 1 to 6. Default is 9999, which means all the countries.}
 
-\item{region_id}{This is the identification number of the region. 1 = Aberdeen City, etc. (for the full list see \url{https://uk-air.defra.gov.uk/}). Default is 9999, which means all the local authorities.}
+\item{region_id}{This is the identification number of the region. 1 =
+Aberdeen City, etc. (for the full list see
+\url{https://uk-air.defra.gov.uk/}). Default is 9999, which means all the
+local authorities.}
 }
 \value{
 A named vector containing Easting and Northing coordinates.
 }
 \description{
-This function fetches the catalogue of monitoring stations from DEFRA's website.
+This function fetches the catalogue of monitoring stations from
+DEFRA's website.
 }
 \details{
 The argument \code{Pollutant} is defined based on the following convention:
@@ -91,4 +99,3 @@ The argument \code{country_id} is defined based on the following convention:
  }
 
 }
-

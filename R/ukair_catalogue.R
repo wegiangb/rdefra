@@ -1,13 +1,21 @@
 #' Get DEFRA UK-AIR stations metadata
 #'
-#' @description This function fetches the catalogue of monitoring stations from DEFRA's website.
+#' @description This function fetches the catalogue of monitoring stations from
+#' DEFRA's website.
 #'
-#' @param site_name This is the name of a specific site. By default this is left blank to get info on all the available sites.
-#' @param pollutant This is a number from 1 to 10. Default is 9999, which means all the pollutants.
-#' @param group_id This is the identification number of a group of stations. Default is 9999 which means all available networks.
+#' @param site_name This is the name of a specific site. By default this is left
+#' blank to get info on all the available sites.
+#' @param pollutant This is a number from 1 to 10. Default is 9999, which means
+#' all the pollutants.
+#' @param group_id This is the identification number of a group of stations.
+#' Default is 9999 which means all available networks.
 #' @param closed This is "true" to include closed stations, "false" otherwise.
-#' @param country_id This is the identification number of the country, it can be a number from 1 to 6. Default is 9999, which means all the countries.
-#' @param region_id This is the identification number of the region. 1 = Aberdeen City, etc. (for the full list see \url{https://uk-air.defra.gov.uk/}). Default is 9999, which means all the local authorities.
+#' @param country_id This is the identification number of the country, it can be
+#' a number from 1 to 6. Default is 9999, which means all the countries.
+#' @param region_id This is the identification number of the region. 1 =
+#' Aberdeen City, etc. (for the full list see
+#' \url{https://uk-air.defra.gov.uk/}). Default is 9999, which means all the
+#' local authorities.
 #'
 #' @details
 #' The argument \code{Pollutant} is defined based on the following convention:
@@ -82,7 +90,7 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
                       closed = "true", country_id = 9999, region_id = 9999){
 
   if (!(pollutant %in% 1:10 | pollutant == 9999)) {
-    stop(paste("The parameter 'polluntant' is not set correctly,",
+    stop(paste("The parameter 'pollutant' is not set correctly,",
                "valid values are integers between 1 and 10 (see documentation)",
                "or 9999 (all pollutants)."))
   }
@@ -137,15 +145,15 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
     df <- data.frame(apply(df, 2, function(x) gsub("^$|^ $", NA, x)),
                      stringsAsFactors = FALSE)
 
-    suppressWarnings(df$Start.Date <- lubridate::ymd(df$Start.Date,
+    suppressWarnings(df[, "Start.Date"] <- lubridate::ymd(df[, "Start.Date"],
                                                      tz = "Europe/London"))
 
-    suppressWarnings(df$End.Date <- lubridate::ymd(df$End.Date,
+    suppressWarnings(df[, "End.Date"] <- lubridate::ymd(df[, "End.Date"],
                                                    tz = "Europe/London"))
 
-    df$Latitude <- as.numeric(as.character(df$Latitude))
-    df$Longitude <- as.numeric(as.character(df$Longitude))
-    df$Altitude..m. <- as.numeric(as.character(df$Altitude..m.))
+    df[, "Latitude"] <- as.numeric(as.character(df[, "Latitude"]))
+    df[, "Longitude"] <- as.numeric(as.character(df[, "Longitude"]))
+    df[, "Altitude..m."] <- as.numeric(as.character(df[, "Altitude..m."]))
 
     return(tibble::as_tibble(df))
 

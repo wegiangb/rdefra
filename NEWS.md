@@ -1,3 +1,16 @@
+rdefra 0.3.5
+==============
+
+## MINOR FIXES
+Functions are updated due to a recent modification of the catalogue API.
+
+## MINOR IMPROVEMENTS
+Changes made after scanning the package using goodpractice:
+* lines no longer than 80 characters
+* 84% code coverage
+* function names shorter than 30 characters
+  - function ukair_get_coordinates now renamed ukair_get_coords
+
 rdefra 0.3.4
 ==============
 

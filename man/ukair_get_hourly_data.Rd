@@ -15,10 +15,14 @@ ukair_get_hourly_data(site_id = NULL, years = NULL)
 A data.frame containing hourly pollution data.
 }
 \description{
-This function fetches hourly data from DEFRA's air pollution monitoring stations.
+This function fetches hourly data from DEFRA's air pollution
+monitoring stations.
 }
 \details{
-The measurements are generally in \eqn{\mu g/m^3} (micrograms per cubic metre). To check the units, refer to the table of attributes (see example below). Please double check the units on the DEFRA website, as they might change over time.
+The measurements are generally in \eqn{\mu g/m^3} (micrograms per
+cubic metre). To check the units, refer to the table of attributes (see
+example below). Please double check the units on the DEFRA website, as they
+might change over time.
 }
 \examples{
  \dontrun{
@@ -34,4 +38,3 @@ The measurements are generally in \eqn{\mu g/m^3} (micrograms per cubic metre). 
  }
 
 }
-

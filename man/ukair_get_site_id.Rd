@@ -2,18 +2,20 @@
 % Please edit documentation in R/ukair_get_site_id.R
 \name{ukair_get_site_id}
 \alias{ukair_get_site_id}
-\title{Get site IDs for DEFRA stations}
+\title{Get site identification numbers for DEFRA stations}
 \usage{
-ukair_get_site_id(IDs)
+ukair_get_site_id(id_s)
 }
 \arguments{
-\item{IDs}{An alphanumeric string (or vector of strings) containing the UK AIR ID defined by DEFRA.}
+\item{id_s}{An alphanumeric string (or vector of strings) containing the UK
+AIR ID defined by DEFRA.}
 }
 \value{
-A named vector containing the site IDs.
+A named vector containing the site id_s.
 }
 \description{
-Given the UK AIR ID (from the \code{ukair_catalogue()}), this function fetches the catalogue of monitoring stations from DEFRA's website.
+Given the UK AIR ID (from the \code{ukair_catalogue()}), this
+function fetches the catalogue of monitoring stations from DEFRA's website.
 }
 \examples{
  \dontrun{
@@ -21,4 +23,3 @@ Given the UK AIR ID (from the \code{ukair_catalogue()}), this function fetches t
  }
 
 }
-
