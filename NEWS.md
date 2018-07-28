@@ -1,3 +1,13 @@
+rdefra 0.3.6
+==============
+
+## BUG FIXES
+* SiteID = NA causes hanging errors [#6](https://github.com/ropensci/rdefra/issues/6)
+* Different variables for ukair_get_coordinates() when inputs are fed in differently [#7](https://github.com/ropensci/rdefra/issues/7)
+
+## MINOR CHANGES
+* function ukair_get_coords back to original name ukair_get_coordinates
+
 rdefra 0.3.5
 ==============
 

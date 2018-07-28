@@ -36,7 +36,7 @@ test_that("Up-to-date metadata catalogue should have at least 6569 stations.", {
 
   x <- ukair_catalogue()
 
-  expect_that(dim(x)[1] >= 6568, equals(TRUE))
+  expect_that(dim(x)[1] >= 6600, equals(TRUE))
 
   closeAllConnections()
 
@@ -59,10 +59,10 @@ test_that("Find easting and northing coordinates of site UKA12536.", {
 
   uka_id <- "UKA12536"
 
-  x <- ukair_get_coords(uka_id)
+  x <- ukair_get_coordinates(uka_id)
 
-  expect_that(all(names(x) == c("UK.AIR.ID", "Easting", "Northing",
-                                "Longitude", "Latitude")), equals(TRUE))
+  expect_that(all(names(x) %in% c("UK.AIR.ID", "Easting", "Northing",
+                                "Latitude", "Longitude")), equals(TRUE))
   expect_that(x$Longitude == -0.416786, equals(TRUE))
   expect_that(x$Latitude == 51.704266, equals(TRUE))
 
@@ -74,10 +74,10 @@ test_that("Find easting and northing coordinates of site UKA15910.", {
 
   uka_id <- "UKA15910"
 
-  x <- ukair_get_coords(uka_id)
+  x <- ukair_get_coordinates(uka_id)
 
-  expect_that(all(names(x) == c("UK.AIR.ID", "Easting", "Northing",
-                                "Longitude", "Latitude")), equals(TRUE))
+  expect_that(all(names(x) %in% c("UK.AIR.ID", "Easting", "Northing",
+                                  "Latitude", "Longitude")), equals(TRUE))
   expect_that(x$Longitude == -0.743709, equals(TRUE))
   expect_that(x$Latitude == 51.322247, equals(TRUE))
 
@@ -88,10 +88,10 @@ test_that("Find easting and northing coordinates of site UKA15910.", {
 test_that("Find easting and northing coordinates of multiple sites.", {
 
   IDs <- c("UKA15910", "UKA15956", "UKA16663", "UKA16097")
-  x <- ukair_get_coords(IDs)
+  x <- ukair_get_coordinates(IDs)
 
-  expect_that(all(names(x) == c("UK.AIR.ID", "Easting", "Northing",
-                                "Longitude", "Latitude")), equals(TRUE))
+  expect_that(all(names(x) %in% c("UK.AIR.ID", "Easting", "Northing",
+                                  "Latitude", "Longitude")), equals(TRUE))
   expect_that(all(x$Longitude == c(-0.743709, -0.63089,
                                    -0.727552, 0.272107)),
               equals(TRUE))
@@ -118,7 +118,7 @@ test_that("Infill missing coordinates from data frame.", {
                         .Names = c("UK.AIR.ID", "Latitude", "Longitude"),
                         row.names = c(NA, -10L),
                         class = c("tbl_df", "tbl", "data.frame"))
-  x <- ukair_get_coords(stations)
+  x <- ukair_get_coordinates(stations)
   expect_equal(round(x$Latitude[which(is.na(stations$Latitude))], 3),
                c(51.704, 51.695, 51.648))
   expect_equal(round(x$Longitude[which(is.na(stations$Longitude))], 3),

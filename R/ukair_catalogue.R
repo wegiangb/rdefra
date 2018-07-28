@@ -151,6 +151,8 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
     suppressWarnings(df[, "End.Date"] <- lubridate::ymd(df[, "End.Date"],
                                                    tz = "Europe/London"))
 
+    df[, "Northing"] <- as.numeric(as.character(df[, "Northing"]))
+    df[, "Easting"] <- as.numeric(as.character(df[, "Easting"]))
     df[, "Latitude"] <- as.numeric(as.character(df[, "Latitude"]))
     df[, "Longitude"] <- as.numeric(as.character(df[, "Longitude"]))
     df[, "Altitude..m."] <- as.numeric(as.character(df[, "Altitude..m."]))
