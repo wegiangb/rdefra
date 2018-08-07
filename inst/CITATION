@@ -1,12 +1,14 @@
 citHeader("To cite 'rdefra' in publications, please use:")
 
-citEntry(entry = "manual",
-  author = "Claudia Vitolo and Andrew Russell and Allan Tucker",
-  title = "rdefra: Interact with the UK AIR Pollution Database from DEFRA",
-  year = "2016",
-  note = "R package version 0.3.4",
-  url = "https://CRAN.R-project.org/package=rdefra",
-  doi = "10.5281/zenodo.61711",
-  textVersion = "Claudia Vitolo, Andrew Russell and Allan Tucker (2016). rdefra: Interact with the UK AIR Pollution Database from DEFRA. R package version 0.3.4
-  https://CRAN.R-project.org/package=rdefra, DOI: https://doi.org/10.5281/zenodo.61711"
-)
+citEntry(entry = "article",
+  doi = "10.21105/joss.00051",
+  url = "http://dx.doi.org/10.21105/joss.00051",
+  year  = "2016",
+  month = "08",
+  publisher = "The Open Journal",
+  volume = "1",
+  number = "4",
+  author = "Vitolo, Claudia and Russell, Andrew and Tucker, Allan",
+  title = "rdefra: Interact with the {UK} {AIR} Pollution Database from {DEFRA}",
+  journal = "The Journal of Open Source Software",
+  textVersion = "Vitolo, C., Russell, A., & Tucker, A. (2016, August). Rdefra: interact with the UK AIR pollution database from DEFRA. The Journal of Open Source Software, 1(4). doi:10.21105/joss.00051")
