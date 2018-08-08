@@ -13,5 +13,6 @@ reviewJOSS.md
 reviewROPENSCI.md
 inst/extdata
 inst/paper
-docs/
 BugFixing.R
+inst/_pkgdown.yml
+^docs$
