@@ -1,0 +1,22 @@
+navbar:
+  title: ~
+  type: default
+  left:
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    menu:
+    - text: JOSS paper
+      href: https://www.doi.org/10.21105/joss.00051
+    - text: Vignette
+      href: articles/index.html
+  - text: News
+    href: news/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/ropensci/rdefra
+
+articles:
+- title: All articles
+  desc: ~
+  contents: rdefra_vignette
