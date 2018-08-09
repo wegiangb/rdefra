@@ -14,5 +14,5 @@ reviewROPENSCI.md
 inst/extdata
 inst/paper
 BugFixing.R
-inst/_pkgdown.yml
+_pkgdown.yml
 ^docs$
