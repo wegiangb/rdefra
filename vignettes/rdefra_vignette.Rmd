@@ -4,7 +4,7 @@ author: "Claudia Vitolo"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{caliver}
+  %\VignetteIndexEntry{rdefra}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
