@@ -53,7 +53,7 @@ install.packages('rdefra')
 
 Or the development version from github using [devtools](https://github.com/hadley/devtools):
 
-```{r}
+```{r, eval = TRUE}
 devtools::install_github('ropensci/rdefra')
 ```
 
