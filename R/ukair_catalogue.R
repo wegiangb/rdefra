@@ -86,8 +86,12 @@
 #'  }
 #'
 
-ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
-                      closed = "true", country_id = 9999, region_id = 9999){
+ukair_catalogue <- function(site_name = "",
+                            pollutant = 9999,
+                            group_id = 9999,
+                            closed = "true",
+                            country_id = 9999,
+                            region_id = 9999){
 
   if (!(pollutant %in% 1:10 | pollutant == 9999)) {
     stop(paste("The parameter 'pollutant' is not set correctly,",
@@ -133,17 +137,24 @@ ukair_catalogue <- function(site_name = "", pollutant = 9999, group_id = 9999,
   if (!is.na(catalogue_csv_link)) {
 
     df <- utils::read.csv(catalogue_csv_link)
+    
+    j <- as.numeric(which(unlist(lapply(df, is.factor))))
     # Convert data.frame columns from factors to characters
-    df[] <- lapply(df, as.character)
+    df[, j] <- lapply(df[, j], as.character)
 
-    df$Start.Date[df$Start.Date == "Unavailable"] <- NA
-    df$End.Date[df$End.Date == "Unavailable"] <- NA
-    df$Environment.Type[df$Environment.Type == "Unknown Unknown"] <- NA
+    # remove trailing and leading white spaces
+    # http://stackoverflow.com/questions/24172111/change-the-blank-cells-to-na
+    df <- data.frame(apply(df, 2, function(x) trimws(x)),
+                     stringsAsFactors = FALSE)
 
     # Change the blank cells to NA
     # http://stackoverflow.com/questions/24172111/change-the-blank-cells-to-na
     df <- data.frame(apply(df, 2, function(x) gsub("^$|^ $", NA, x)),
                      stringsAsFactors = FALSE)
+
+    df$Environment.Type[df$Environment.Type == "Not Available"] <- NA
+    df$Start.Date[df$Start.Date == "Unavailable"] <- NA
+    df$End.Date[df$End.Date == "Unavailable"] <- NA
 
     suppressWarnings(df[, "Start.Date"] <- lubridate::ymd(df[, "Start.Date"],
                                                      tz = "Europe/London"))
