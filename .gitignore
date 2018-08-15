@@ -9,6 +9,7 @@
 
 README_cache/*
 vignettes/rdefra_vignette_cache/*
+vignettes/*.R
 BugFixing.R
 
 # Remove docs folder (site builds automatically)
